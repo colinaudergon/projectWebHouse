@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <title>Web House</title>
+</head>
+<body>
+    <!-- Side navigation -->
+    <div class="sidenav">
+        <a href="#" onclick="loadPage('home','Home')"><i class="fa fa-fw fa-bars" ></i>Home</a>
+        <a href="#" onclick="loadPage('House','House')"><i class="fa fa-fw fa-home"></i>House</a>
+        <a href="#" onclick="loadPage('devices','Devices')"><i class="fa fa-fw fa-wrench"></i>Devices</a>
+        <a href="#" onclick="loadPage('test','Test')"><i class="fa fa-fw fa-wrench"></i>Test</a>
+        <div class="info">
+            Colin A. <br>
+            Luka P.  <br>
+        </div>
+    </div>
+    <!-- Content Area -->
+    <h1 class="pageTitle" id="pageTitle"></h1>
+    <div class="top-line"></div>
+    <div class ="main" id="content">
+        <!-- Content will be dynamically loaded here -->
+    </div>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/modal.js"></script>
+    <script src="scripts/socket.js"></script>
+    <script src="scripts/home.js"></script>    
+</body>
+</html>

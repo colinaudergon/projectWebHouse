@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="css/deviceStyle.css">
+<div>
+    <button id="addDeviceButton" class="button add-device-button" onclick="openPopup('addDevice')">
+        <span class="plus-icon"></span> Add Device
+    </button>
+    <table id="deviceTable" class="display">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Device Name</th>
+                <th>Device type</th>
+                <th>Status</th>
+                <th>Location</th>
+                <th><button  class="ellipsisbtn" onclick="openPopup('edit')"> <i class="fa fa-ellipsis-v"></i></button></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Device rows will be added dynamically here -->
+        </tbody>
+    </table>
+
+</div>
+
+
+<!-- Popup addDevice-->
+<div id="addDevice" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePopup('addDevice')">&times;</span>
+        <!-- Content of the popup goes here -->
+        <h2>Add a new device</h2>
+        <div class="top-line"></div>
+        <div>
+            
+            <input class="inputArea" id="ipTxt" type="text" placeholder="ID" >
+            <input class="inputArea" id="portTxt" type="text" placeholder="Device name">
+        </div>
+        <button id="addDeviceButton" class="button add-device-button" onclick="closePopup('addDevice')">add</button>
+    </div>
+    </div>
+</div>
+
+
+<!-- Modal (popup) -->
+<div id="edit" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePopup('edit')">&times;</span>
+        <!-- Content of the popup goes here -->
+        <h2>Edit device</h2>
+        <div class="top-line"></div>
+        <!-- Add your form or content here -->
+    </div>
+</div>

@@ -1,0 +1,52 @@
+/* Device Table */
+#deviceTable {
+    width: 80%; /* Adjust the width based on your design */
+  }
+  
+  /* Table Styles */
+  #deviceTable th, #deviceTable td {
+  
+    border: 1px solid #ddd; /* Add borders between cells */
+    padding: 8px;
+    text-align: left;
+  }
+  /* Style for the header row */
+  #deviceTable th {
+    background-color: transparent; /* Light gray background for header row */
+  }
+  
+  .online {
+    color: green;
+  }
+  
+  .offline {
+    color: red;
+  }
+  
+  .isRunning{
+    color: yellow;
+  }
+  
+  .isNotRunning{
+    color: #000;
+  }
+  
+  /* Add Device Button */
+  .add-device-button {
+    position: relative;
+    background-color: #4CAF50; /* Green background color */
+    color: #fff; /* White text color */
+    
+  }
+  
+  .add-device-button:hover {
+    background-color: #45a049; /* Darker green color on hover */
+  }
+  
+  /* Plus Icon */
+  .plus-icon::before {
+    content: '\002B'; /* Unicode character for plus (+) */
+    font-size: 20px;
+    margin-right: 5px;
+  }
+  

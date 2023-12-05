@@ -1,0 +1,25 @@
+<!-- Content for Home Page (home.html) -->
+<!-- Add project  description, links ect -->
+<link rel="stylesheet" href="css/homeStyle.css">
+
+
+<div>
+    <button id="addDeviceButton" class="button addSocketButton" onclick="openPopup('chooseSocket'),getCurrentSocket()">Choose socket</button>
+</div>
+
+<!-- Popup chooseSocket-->
+<div id="chooseSocket" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePopup('chooseSocket')">&times;</span>
+        <!-- Content of the popup goes here -->
+        <h2>select socket</h2>
+        <div class="top-line"></div>
+        <!-- Add your form or content here -->
+        <div>
+            <p>current socket:</p><br>
+            <input  id="ipTxt" type="text" minlength="7" maxlength="15" size="14" placeholder="IP" >
+            <input id="portTxt" type="text" minlength="4" maxlength="4" placeholder="Port" size = 8>
+        </div>
+        <button id="addDeviceButton" class="button addSocketButton" onclick="callInitSocket() , closePopup('chooseSocket')">Choose socket</button>
+    </div>
+</div>

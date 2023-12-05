@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+  }
+
+   /* Style for each rectangle */
+.room {
+    flex: 1; /* Each rectangle takes up equal space */
+    height: 100px; /* Adjust the height as needed */
+    width: 33%;
+    border: 2px solid #afa9a9; /* Add a border for visibility */
+    box-sizing: border-box; /* Include border in total width and height */
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 2px;
+    cursor: pointer;
+  }
+.room:hover{
+  background-color: #d1cfcf;
+}
+
+.roomName{
+  text-decoration: underline;
+}

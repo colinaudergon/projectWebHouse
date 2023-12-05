@@ -1,0 +1,7 @@
+.addSocketButton{
+    position: relative;
+    background-color: lightgrey;
+}
+.addSocketButton:hover {
+    background-color: grey;
+  }
