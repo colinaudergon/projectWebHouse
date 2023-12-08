@@ -86,9 +86,7 @@ int main(int argc, char **argv)
 	int addrlen = sizeof(struct sockaddr_in);
 
 	struct sockaddr_in addr_remote;
-	int addrlen_remote; 
 
-	int *addr_remote = &addrlen;
 	int backlog = 5;
 
 	signal(SIGINT, shutdownHook);
