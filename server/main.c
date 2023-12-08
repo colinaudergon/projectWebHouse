@@ -43,7 +43,7 @@ typedef int int32_t;
 #include "jansson.h"
 #include "Webhouse.h"
 #include "handshake.h"
-#include <string.h>	
+#include <string.h>
 
 //----- Macros -----------------------------------------------------------------
 #define TRUE 1
@@ -131,10 +131,19 @@ void initSocket(void)
 		printf("Error: socket could not be openedr\r\n");
 		return -1;
 	}
-	printf("I called the socket!");
+
+	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
+	if (bind_status < 0)
+	{
+		close(sock_id);
+	}
+	else
+	{
+		/* Socket bound to desired port */
+		printf("Socket bound to desired port");
+	}
 	// printf(server_sock_id);
 	// Binds socket
-	// bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
 	// if (bind_status > 0)
 	// 	;
 	// else
