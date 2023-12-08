@@ -143,7 +143,7 @@ void initSocket(void)
 		listen_status = listen(server_sock_id, backlog);
 		if (listen_status > 0)
 		{
-			print("Trying to accept newsocet Id");
+			printf("Trying to accept newsocet Id");
 			newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
 								&addrlen);
 			if (newSock_id < 0)
