@@ -157,8 +157,8 @@ void initSocket(void)
 void sendDataTCP(const char *message)
 {
 	// Copy the provided message into txBuf
-	strncpy(txBuf, message, TX_BUFFER_SIZE);
-
+	// strncpy(txBuf, message, TX_BUFFER_SIZE);
+	txBuf[0] = "a";
 	// Send the data
 	tx_msg_len = send(newSock_id, &txBuf[0], TX_BUFFER_SIZE, 0);
 
