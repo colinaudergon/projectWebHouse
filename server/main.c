@@ -57,6 +57,7 @@ void closeConnection(void);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
+const SERVER_PORT_NBR = 8000;
 
 //----- Implementation ---------------------------------------------------------
 
@@ -73,29 +74,20 @@ static volatile int eShutdown = FALSE;
  ******************************************************************************/
 struct sockaddr_in server;
 struct sockaddr_in client;
+int bind_status;
+int listen_status;
+int server_sock_id;
+int com_sock_id;
+int addrlen = sizeof(struct sockaddr_in);
+struct sockaddr_in addr_remote;
+int backlog = 5;
+int newSock_id;
+char txBuf[TX_BUFFER_SIZE];
+int tx_msg_len;
 
 int main(int argc, char **argv)
 {
-	int bind_status;
-
-	int listen_status;
-
-	int server_sock_id;
-	int com_sock_id;
-
-
-	int addrlen = sizeof(struct sockaddr_in);
-
-	struct sockaddr_in addr_remote;
-
-	int backlog = 5;
-
 	signal(SIGINT, shutdownHook);
-
-	int newSock_id;
-	char txBuf[TX_BUFFER_SIZE];
-	int tx_msg_len;
-
 	// server.sin_family = AF_INET;
 	// server.sin_port = htons(SERVER_PORT_NBR);
 	// server.sin_addr.s_addr = htonl(INADDR_ANY);
