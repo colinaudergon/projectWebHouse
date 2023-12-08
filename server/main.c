@@ -163,7 +163,7 @@ void sendDataTCP(const char *message)
 	tx_msg_len = send(newSock_id, &txBuf[0], TX_BUFFER_SIZE, 0);
 
 	// Check for errors or connection loss
-	printf(tx_msg_len);
+	printf("%d",tx_msg_len);
 	if (tx_msg_len > 0)
 	{
 		/* Data was sent */
