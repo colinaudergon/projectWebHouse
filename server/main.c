@@ -95,9 +95,9 @@ int main(int argc, char **argv)
 	fflush(stdout);
 	initSocket();
 
+		printf("Main Loop\n");
 	while (eShutdown == FALSE)
 	{
-		printf("Main Loop\n");
 		fflush(stdout);
 		const char *message = "Hello world";
         sendDataTCP(message);
@@ -137,7 +137,7 @@ void initSocket(void)
 	else
 	{
 		/* Socket bound to desired port */
-		printf("Socket bound to desired port");
+		printf("Socket bound to desired port\n");
 		listen_status = listen(server_sock_id, backlog);
 		if (listen_status > 0)
 		{
@@ -146,7 +146,10 @@ void initSocket(void)
 			if (newSock_id < 0)
 			{
 				close(newSock_id);
-				printf("Failed to accept socket");
+				printf("Failed to accept socket\n");
+			}
+			else{
+				printf("New socket id: %d\n",newSock_id);
 			}
 		}
 	}
