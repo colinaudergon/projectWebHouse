@@ -52,7 +52,7 @@ typedef int int32_t;
 
 //----- Function prototypes ----------------------------------------------------
 static void shutdownHook(int32_t sig);
-int initSocket(void);
+void initSocket(void);
 void sendDataTCP(const char *message);
 void closeConnection(void);
 
@@ -99,11 +99,7 @@ int main(int argc, char **argv)
 	while (eShutdown == FALSE)
 	{
 		fflush(stdout);
-		int connected = -1;
-		while(connected < 0){
-			connected = initSocket();
-			printf("Not connected");
-		}
+		initSocket();
 		printf("Connected");
 		sleep(1);
 	}
@@ -115,55 +111,35 @@ int main(int argc, char **argv)
 	return EXIT_SUCCESS;
 }
 
-int initSocket(void)
+void initSocket(void)
 {
-
-	// Calls binding
+int socket_desc , new_socket , c;
+	struct sockaddr_in server , client;
+	
+	//Create socket
+	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+	if (socket_desc == -1) printf("Could not create socket");
+	
+	//Prepare the sockaddr_in structure
 	server.sin_family = AF_INET;
-	server.sin_port = htons(SERVER_PORT_NBR);
-	server.sin_addr.s_addr = htonl(INADDR_ANY);
-
-	// Calls socket
-	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (server_sock_id > 0){
-		printf("Server socket id: %d \n",server_sock_id);
-	}
-		
-	else
-	{
-		printf("Error: socket could not be openedr\r\n");
-		return -1;
-	}
-
-	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
-	if (bind_status < 0)
-	{
-		close(server_sock_id);
-	}
-	else
-	{
-		/* Socket bound to desired port */
-		printf("Socket bound to desired port\n");
-		listen_status = listen(server_sock_id, backlog);
-		if (listen_status > 0)
-		{
-			printf("Trying to accept newsocet Id");
-			newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
-								&addrlen);
-			if (newSock_id > 0)
-			{
-				printf("Failed to accept socket\n");
-				close(newSock_id);
-			}
-			else{
-				printf("New socket id: %d\n",newSock_id);
-			}
-		}
-		else{
-			printf("Error while listening\n");
-			close(server_sock_id);
-		}
-	}
+	server.sin_addr.s_addr = INADDR_ANY;
+	server.sin_port = htons( 8888 );
+	
+	//Bind
+	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0) puts("bind failed");
+	puts("bind done");
+	
+	//Listen
+	listen(socket_desc , 3);
+	
+	//Accept and incoming connection
+	puts("Waiting for incoming connections...");
+	c = sizeof(struct sockaddr_in);
+	new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
+	if (new_socket<0) perror("accept failed");
+	
+	puts("Connection accepted");
+	return;
 }
 /*******************************************************************************
  *  function :    sendDataTCP
