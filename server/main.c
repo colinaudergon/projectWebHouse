@@ -43,6 +43,7 @@ typedef int int32_t;
 #include "jansson.h"
 #include "Webhouse.h"
 #include "handshake.h"
+#include <string.h>	
 
 //----- Macros -----------------------------------------------------------------
 #define TRUE 1
@@ -120,15 +121,10 @@ int main(int argc, char **argv)
 	{
 		printf("Main Loop\n");
 		fflush(stdout);
-		newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
-							&addrlen);
-		if (newSock_id < 0)
-		{
-			close(server_sock_id);
-		}
-		else
-		{
-		}
+		tx_msg_len = send(newSock_id, &txBuf[0], TX_BUFFER_SIZE, 0);
+
+		const char *message = "Hello world";
+		strncpy(txBuf, message, TX_BUFFER_SIZE);
 		// usleep(1000);
 		sleep(1);
 	}
@@ -171,7 +167,15 @@ void initSocket(void)
 	// Listening state
 	listen_status = listen(server_sock_id, backlog);
 	if (listen_status > 0)
-		;
+	{
+		newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
+							&addrlen);
+		if (newSock_id < 0)
+		{
+			close(server_sock_id);
+		}
+	}
+
 	else
 	{
 		close(server_sock_id);
@@ -187,14 +191,17 @@ void sendDataTCP(void)
 	if (tx_msg_len > 0)
 	{
 		/* Data was sent */
+		printf("Data sent");
 	}
 	else if (tx_msg_len == 0)
 	{
 		/* Connection was lost */
+		printf("Connection lost");
 	}
 	else
 	{
 		/* Data not sent */
+		printf("Data not sent");
 	}
 }
 
