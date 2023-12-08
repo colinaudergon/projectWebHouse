@@ -146,7 +146,7 @@ void initSocket(void)
 			printf("Trying to accept newsocet Id");
 			newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
 								&addrlen);
-			if (newSock_id < 0)
+			if (newSock_id > 0)
 			{
 				printf("Failed to accept socket\n");
 				close(newSock_id);
