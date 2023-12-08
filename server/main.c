@@ -160,7 +160,7 @@ void sendDataTCP(const char *message)
 	strncpy(txBuf, message, TX_BUFFER_SIZE);
 
 	// Send the data
-	tx_msg_len = send(newSock_id, txBuf, strlen(txBuf), 0);
+	tx_msg_len = send(newSock_id, &txBuf[0], TX_BUFFER_SIZE, 0);
 
 	// Check for errors or connection loss
 	if (tx_msg_len > 0)

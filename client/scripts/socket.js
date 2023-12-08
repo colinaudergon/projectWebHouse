@@ -11,7 +11,7 @@ function openConnection(ip, port) {
 
   const url = `ws://${ip}:${port}`;
   if (ip !== null || port !== null){
-    socket = new WebSocket("ws://localhost:8080");
+    socket = new WebSocket("ws://192.168.178.83:8000");
   }
   else{
     socket = new WebSocket (url);
