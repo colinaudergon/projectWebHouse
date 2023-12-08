@@ -75,12 +75,41 @@ int main(int argc, char **argv) {
 	struct sockaddr_in server;
 	struct sockaddr_in client;
 	int addrlen = sizeof (struct sockaddr_in);
+	int backlog = 5;
 	
 	signal(SIGINT, shutdownHook);
 
+	server.sin_family = AF_INET;
+	server.sin_port = htons(SERVER_PORT_NBR);
+	server.sin_addr.s_addr = htonl(INADDR_ANY);
+
 	initWebhouse();
-    printf("Init Webhouse\n");
+    printf("Init Webhouse\r\n");
 	fflush(stdout);
+
+	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if(server_sock_id > 0);
+	else{
+		printf("Error: socket could not be openedr\r\n");
+		return -1;
+	}
+
+	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
+	if(bind_status > 0);
+	else{
+		close(server_sock_id);
+		printf("Error: socket could not be bound\r\n");
+		return -1;
+	}
+
+	listen_status = listen(server_sock_id, backlog);
+	if(listen_status > 0);
+	else{
+		close(server_sock_id);
+		printf("Error: failed to listen\r\n");
+	}
+
+
 
 	while (eShutdown == FALSE) {
 		printf("Main Loop\n");
