@@ -53,7 +53,7 @@ typedef int int32_t;
 //----- Function prototypes ----------------------------------------------------
 static void shutdownHook(int32_t sig);
 void initSocket(void);
-void sendDataTCP(void);
+void sendDataTCP(const char *message);
 void closeConnection(void);
 
 //----- Data -------------------------------------------------------------------
