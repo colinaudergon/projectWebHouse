@@ -122,7 +122,7 @@ void initSocket(void)
 	// Calls socket
 	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (server_sock_id > 0){
-		printf("Server cosket id: %d",server_sock_id);
+		printf("Server cosket id: %d \n",server_sock_id);
 	}
 		
 	else
@@ -157,6 +157,7 @@ void initSocket(void)
 		}
 		else{
 			printf("Error while listening\n");
+			close(server_sock_id);
 		}
 	}
 }
@@ -209,6 +210,7 @@ void closeConnection(void)
  ******************************************************************************/
 static void shutdownHook(int32_t sig)
 {
+	printf("\n ");
 	printf("Ctrl-C pressed....shutdown hook in main\n");
 	fflush(stdout);
 	eShutdown = TRUE;
