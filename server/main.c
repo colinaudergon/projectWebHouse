@@ -93,14 +93,14 @@ int main(int argc, char **argv)
 	printf("Init Webhouse\r\n");
 	initWebhouse();
 	fflush(stdout);
-	initSocket();
 
 		printf("Main Loop\n");
 	while (eShutdown == FALSE)
 	{
+		initSocket();
 		fflush(stdout);
 		initSocket();
-		printf("Connected");
+		// printf("Connected");
 		sleep(1);
 	}
 
@@ -123,7 +123,7 @@ int socket_desc , new_socket , c;
 	//Prepare the sockaddr_in structure
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons( 8888 );
+	server.sin_port = htons( SERVER_PORT_NBR );
 	
 	//Bind
 	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0) puts("bind failed");
