@@ -94,12 +94,11 @@ int main(int argc, char **argv)
 	initWebhouse();
 	fflush(stdout);
 
-		printf("Main Loop\n");
+	printf("Main Loop\n");
+	initSocket();
 	while (eShutdown == FALSE)
 	{
-		initSocket();
 		fflush(stdout);
-		initSocket();
 		// printf("Connected");
 		sleep(1);
 	}
@@ -113,31 +112,34 @@ int main(int argc, char **argv)
 
 void initSocket(void)
 {
-int socket_desc , new_socket , c;
-	struct sockaddr_in server , client;
-	
-	//Create socket
-	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-	if (socket_desc == -1) printf("Could not create socket");
-	
-	//Prepare the sockaddr_in structure
+	int socket_desc, new_socket, c;
+	struct sockaddr_in server, client;
+
+	// Create socket
+	socket_desc = socket(AF_INET, SOCK_STREAM, 0);
+	if (socket_desc == -1)
+		printf("Could not create socket");
+
+	// Prepare the sockaddr_in structure
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons( SERVER_PORT_NBR );
-	
-	//Bind
-	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0) puts("bind failed");
+	server.sin_port = htons(SERVER_PORT_NBR);
+
+	// Bind
+	if (bind(socket_desc, (struct sockaddr *)&server, sizeof(server)) < 0)
+		puts("bind failed");
 	puts("bind done");
-	
-	//Listen
-	listen(socket_desc , 3);
-	
-	//Accept and incoming connection
+
+	// Listen
+	listen(socket_desc, 3);
+
+	// Accept and incoming connection
 	puts("Waiting for incoming connections...");
 	c = sizeof(struct sockaddr_in);
-	new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
-	if (new_socket<0) perror("accept failed");
-	
+	new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t *)&c);
+	if (new_socket < 0)
+		perror("accept failed");
+
 	puts("Connection accepted");
 	return;
 }
@@ -153,7 +155,7 @@ void sendDataTCP(const char *message)
 	tx_msg_len = send(newSock_id, &txBuf[0], TX_BUFFER_SIZE, 0);
 
 	// Check for errors or connection loss
-	printf("%d",tx_msg_len);
+	printf("%d", tx_msg_len);
 	if (tx_msg_len > 0)
 	{
 		/* Data was sent */
