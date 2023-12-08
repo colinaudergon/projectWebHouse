@@ -78,9 +78,9 @@ int main(int argc, char **argv) {
 	int backlog = 5;
 	
 	signal(SIGINT, shutdownHook);
-
+	int32_t server_port = 8000;
 	server.sin_family = AF_INET;
-	server.sin_port = htons(SERVER_PORT_NBR);
+	server.sin_port = htons(server_port);
 	server.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	initWebhouse();
