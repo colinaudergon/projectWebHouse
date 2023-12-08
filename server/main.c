@@ -131,6 +131,7 @@ void initSocket(void)
 		printf("Error: socket could not be openedr\r\n");
 		return -1;
 	}
+	printf("I called the socket!");
 	// printf(server_sock_id);
 	// Binds socket
 	// bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
