@@ -53,7 +53,7 @@ typedef int int32_t;
 static void shutdownHook(int32_t sig);
 void initSocket(void);
 void sendDataTCP(void);
-void closeConnection (void) ;
+void closeConnection(void);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
@@ -84,6 +84,11 @@ int main(int argc, char **argv)
 	struct sockaddr_in client;
 
 	int addrlen = sizeof(struct sockaddr_in);
+
+	struct sockaddr_in addr_remote;
+	int addrlen_remote; 
+
+	int *addr_remote = &addrlen;
 	int backlog = 5;
 
 	signal(SIGINT, shutdownHook);
@@ -95,6 +100,7 @@ int main(int argc, char **argv)
 	// server.sin_family = AF_INET;
 	// server.sin_port = htons(SERVER_PORT_NBR);
 	// server.sin_addr.s_addr = htonl(INADDR_ANY);
+
 	initWebhouse();
 	printf("Init Webhouse\r\n");
 	fflush(stdout);
@@ -123,8 +129,8 @@ int main(int argc, char **argv)
 	{
 		printf("Main Loop\n");
 		fflush(stdout);
-		newSock_id = accept(server_sock_id, (struct sockaddr *)&addr_remote,
-							&addrlen_remote);
+		newSock_id = accept(sock_id, (struct sockaddr *)&client,
+							&addrlen);
 		if (newSock_id < 0)
 		{
 			close(server_sock_id);
@@ -201,7 +207,8 @@ void sendDataTCP(void)
 	}
 }
 
-void closeConnection (void) {
+void closeConnection(void)
+{
 	close(newSock_id);
 }
 
