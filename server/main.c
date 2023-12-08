@@ -121,8 +121,10 @@ void initSocket(void)
 
 	// Calls socket
 	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (server_sock_id > 0)
-		;
+	if (server_sock_id > 0){
+		printf("Server cosket id: %d",server_sock_id);
+	}
+		
 	else
 	{
 		printf("Error: socket could not be openedr\r\n");
@@ -141,6 +143,7 @@ void initSocket(void)
 		listen_status = listen(server_sock_id, backlog);
 		if (listen_status > 0)
 		{
+			print("Trying to accept newsocet Id");
 			newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
 								&addrlen);
 			if (newSock_id < 0)
@@ -151,6 +154,9 @@ void initSocket(void)
 			else{
 				printf("New socket id: %d\n",newSock_id);
 			}
+		}
+		else{
+			printf("Error while listening\n");
 		}
 	}
 }
