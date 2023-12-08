@@ -135,7 +135,7 @@ void initSocket(void)
 	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
 	if (bind_status < 0)
 	{
-		close(sock_id);
+		close(server_sock_id);
 	}
 	else
 	{
