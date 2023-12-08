@@ -71,6 +71,9 @@ static volatile int eShutdown = FALSE;
  *  \return       EXIT_SUCCESS
  *
  ******************************************************************************/
+struct sockaddr_in server;
+struct sockaddr_in client;
+
 int main(int argc, char **argv)
 {
 	int bind_status;
@@ -80,8 +83,6 @@ int main(int argc, char **argv)
 	int server_sock_id;
 	int com_sock_id;
 
-	struct sockaddr_in server;
-	struct sockaddr_in client;
 
 	int addrlen = sizeof(struct sockaddr_in);
 
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
 	{
 		printf("Main Loop\n");
 		fflush(stdout);
-		newSock_id = accept(sock_id, (struct sockaddr *)&client,
+		newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
 							&addrlen);
 		if (newSock_id < 0)
 		{
