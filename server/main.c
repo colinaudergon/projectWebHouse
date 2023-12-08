@@ -95,7 +95,6 @@ int main(int argc, char **argv)
 	// server.sin_family = AF_INET;
 	// server.sin_port = htons(SERVER_PORT_NBR);
 	// server.sin_addr.s_addr = htonl(INADDR_ANY);
-
 	initWebhouse();
 	printf("Init Webhouse\r\n");
 	fflush(stdout);
@@ -106,7 +105,6 @@ int main(int argc, char **argv)
 	// 	printf("Error: socket could not be openedr\r\n");
 	// 	return -1;
 	// }
-
 	// bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
 	// if(bind_status > 0);
 	// else{
@@ -114,7 +112,6 @@ int main(int argc, char **argv)
 	// 	printf("Error: socket could not be bound\r\n");
 	// 	return -1;
 	// }
-
 	// listen_status = listen(server_sock_id, backlog);
 	// if(listen_status > 0);
 	// else{
@@ -126,11 +123,11 @@ int main(int argc, char **argv)
 	{
 		printf("Main Loop\n");
 		fflush(stdout);
-		newSock_id = accept(sock_id, (struct sockaddr *)&addr_remote,
+		newSock_id = accept(server_sock_id, (struct sockaddr *)&addr_remote,
 							&addrlen_remote);
 		if (newSock_id < 0)
 		{
-			close(sock_id);
+			close(server_sock_id);
 		}
 		else
 		{
