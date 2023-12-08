@@ -131,34 +131,34 @@ void initSocket(void)
 		printf("Error: socket could not be openedr\r\n");
 		return -1;
 	}
-	printf(server_sock_id);
+	// printf(server_sock_id);
 	// Binds socket
-	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
-	if (bind_status > 0)
-		;
-	else
-	{
-		close(server_sock_id);
-		printf("Error: socket could not be bound\r\n");
-		return -1;
-	}
-	// Listening state
-	listen_status = listen(server_sock_id, backlog);
-	if (listen_status > 0)
-	{
-		newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
-							&addrlen);
-		if (newSock_id < 0)
-		{
-			close(server_sock_id);
-		}
-	}
+	// bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
+	// if (bind_status > 0)
+	// 	;
+	// else
+	// {
+	// 	close(server_sock_id);
+	// 	printf("Error: socket could not be bound\r\n");
+	// 	return -1;
+	// }
+	// // Listening state
+	// listen_status = listen(server_sock_id, backlog);
+	// if (listen_status > 0)
+	// {
+	// 	newSock_id = accept(server_sock_id, (struct sockaddr *)&client,
+	// 						&addrlen);
+	// 	if (newSock_id < 0)
+	// 	{
+	// 		close(server_sock_id);
+	// 	}
+	// }
 
-	else
-	{
-		close(server_sock_id);
-		printf("Error: failed to listen\r\n");
-	}
+	// else
+	// {
+	// 	close(server_sock_id);
+	// 	printf("Error: failed to listen\r\n");
+	// }
 }
 /*******************************************************************************
  *  function :    sendDataTCP
