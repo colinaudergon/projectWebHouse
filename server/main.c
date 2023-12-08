@@ -89,42 +89,20 @@ int tx_msg_len;
 int main(int argc, char **argv)
 {
 	signal(SIGINT, shutdownHook);
-	// server.sin_family = AF_INET;
-	// server.sin_port = htons(SERVER_PORT_NBR);
-	// server.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	initWebhouse();
 	printf("Init Webhouse\r\n");
 	fflush(stdout);
 	initSocket();
-	// server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	// if(server_sock_id > 0);
-	// else{
-	// 	printf("Error: socket could not be openedr\r\n");
-	// 	return -1;
-	// }
-	// bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
-	// if(bind_status > 0);
-	// else{
-	// 	close(server_sock_id);
-	// 	printf("Error: socket could not be bound\r\n");
-	// 	return -1;
-	// }
-	// listen_status = listen(server_sock_id, backlog);
-	// if(listen_status > 0);
-	// else{
-	// 	close(server_sock_id);
-	// 	printf("Error: failed to listen\r\n");
-	// }
 
 	while (eShutdown == FALSE)
 	{
 		printf("Main Loop\n");
 		fflush(stdout);
-		tx_msg_len = send(newSock_id, &txBuf[0], TX_BUFFER_SIZE, 0);
 
 		const char *message = "Hello world";
-		strncpy(txBuf, message, TX_BUFFER_SIZE);
+		// strncpy(txBuf, message, TX_BUFFER_SIZE);
+		sendDataTCP(message_encodedTo send)
 		// usleep(1000);
 		sleep(1);
 	}
@@ -153,7 +131,7 @@ void initSocket(void)
 		printf("Error: socket could not be openedr\r\n");
 		return -1;
 	}
-
+	printf(server_sock_id);
 	// Binds socket
 	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
 	if (bind_status > 0)
