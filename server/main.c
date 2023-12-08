@@ -148,15 +148,17 @@ void initSocket(void)
 								&addrlen);
 			if (newSock_id < 0)
 			{
-				close(newSock_id);
 				printf("Failed to accept socket\n");
+				close(newSock_id);
 			}
 			else{
 				printf("New socket id: %d\n",newSock_id);
 			}
 		}
 		else{
-			printf("Error while listening\n");
+			// printf("Error while listening\n");
+			perror("Error while listening");
+
 			close(server_sock_id);
 		}
 	}
