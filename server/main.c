@@ -90,8 +90,8 @@ int main(int argc, char **argv)
 {
 	signal(SIGINT, shutdownHook);
 
-	initWebhouse();
 	printf("Init Webhouse\r\n");
+	initWebhouse();
 	fflush(stdout);
 	initSocket();
 
@@ -99,8 +99,12 @@ int main(int argc, char **argv)
 	while (eShutdown == FALSE)
 	{
 		fflush(stdout);
-		const char *message = "Hello world";
-        sendDataTCP(message);
+		int connected = -1;
+		while(connected < 0){
+			connected = initSocket();
+			printf("Not connected");
+		}
+		printf("Connected");
 		sleep(1);
 	}
 
@@ -111,7 +115,7 @@ int main(int argc, char **argv)
 	return EXIT_SUCCESS;
 }
 
-void initSocket(void)
+int initSocket(void)
 {
 
 	// Calls binding
@@ -122,7 +126,7 @@ void initSocket(void)
 	// Calls socket
 	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (server_sock_id > 0){
-		printf("Server cosket id: %d \n",server_sock_id);
+		printf("Server socket id: %d \n",server_sock_id);
 	}
 		
 	else
@@ -156,9 +160,7 @@ void initSocket(void)
 			}
 		}
 		else{
-			// printf("Error while listening\n");
-			perror("Error while listening");
-
+			printf("Error while listening\n");
 			close(server_sock_id);
 		}
 	}

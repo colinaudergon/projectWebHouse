@@ -7,15 +7,16 @@ let socket = null;
 
 
 
-function openConnection(ip, port) {
+function openConnection() {
 
-  const url = `ws://${ip}:${port}`;
-  if (ip !== null || port !== null){
-    socket = new WebSocket("ws://192.168.178.83:8000");
-  }
-  else{
-    socket = new WebSocket (url);
-  }
+  // const url = `ws://${ip}:${port}`;
+  socket = new WebSocket("ws://192.168.178.83:8000");
+  // if (ip !== null || port !== null){
+  //   socket = new WebSocket("ws://192.168.178.83:8000");
+  // }
+  // else{
+  //   socket = new WebSocket (url);
+  // }
 
   socket.onopen = function () {
     alert("connection has been established");
@@ -46,10 +47,10 @@ function send(value) {
 }
 
 
-socket.onmessage = function (message) {
-  var textField  = document.getElementById("ReceivedDataID");
-  textField.value = message.data;
-}
+// socket.onmessage = function (message) {
+//   var textField  = document.getElementById("ReceivedDataID");
+//   textField.value = message.data;
+// }
 
 
 function getWebSocket(){
