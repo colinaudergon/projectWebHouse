@@ -145,7 +145,7 @@ void initSocket(void)
 								&addrlen);
 			if (newSock_id < 0)
 			{
-				close(sock_id);
+				close(newSock_id);
 				printf("Failed to accept socket");
 			}
 		}
