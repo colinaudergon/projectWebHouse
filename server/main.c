@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
 		const char *message = "Hello world";
 		// strncpy(txBuf, message, TX_BUFFER_SIZE);
-		sendDataTCP(message_encodedTo send)
+		// sendDataTCP(message_encodedTo send)
 		// usleep(1000);
 		sleep(1);
 	}
