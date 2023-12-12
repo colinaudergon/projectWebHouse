@@ -2,21 +2,9 @@
 //Must work on this part
 
 let socket = null;
-
-// 'ws://192.168.2.100:8000'
-
-
-
+// '
 function openConnection() {
-
-  // const url = `ws://${ip}:${port}`;
-  socket = new WebSocket("ws://192.168.178.83:8000");
-  // if (ip !== null || port !== null){
-  //   socket = new WebSocket("ws://192.168.178.83:8000");
-  // }
-  // else{
-  //   socket = new WebSocket (url);
-  // }
+  socket = new WebSocket("ws://192.168.2.100:8000");
 
   socket.onopen = function () {
     alert("connection has been established");
@@ -31,8 +19,9 @@ function openConnection() {
   }
 
   socket.onmessage = function (message) {
-    var textField  = document.getElementById("ReceivedDataID");
-    textField.value = message.data;
+    // var textField  = document.getElementById("ReceivedDataID");
+    // textField.value = message.data;
+    console.log("Received data!");
   }
 }
 
@@ -41,17 +30,9 @@ function closeConnection () {
   clearInterval(interval);
 }
 
-//value: <id:X,state:X,val:X>
 function send(value) {
   socket.send(value);
 }
-
-
-// socket.onmessage = function (message) {
-//   var textField  = document.getElementById("ReceivedDataID");
-//   textField.value = message.data;
-// }
-
 
 function getWebSocket(){
   var state;
