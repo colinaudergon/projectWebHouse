@@ -23,8 +23,6 @@ function openConnection() {
 
 function closeConnection () {
   socket.close();
-  //interval is removed
-  // clearInterval(interval);
 }
 
 function send() {
