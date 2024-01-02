@@ -122,22 +122,22 @@ int main(int argc, char **argv)
 		// printf("Main Loop\n");
 		fflush(stdout);
 
-		fd_set readfds;
-		FD_ZERO(&readfds);
-		FD_SET(server_sock_id, &readfds);
+		// fd_set readfds;
+		// FD_ZERO(&readfds);
+		// FD_SET(server_sock_id, &readfds);
 
-		struct timeval timeout;
-		timeout.tv_sec = 0;
-		timeout.tv_usec = 10000; // 10 milliseconds
+		// struct timeval timeout;
+		// timeout.tv_sec = 0;
+		// timeout.tv_usec = 10000; // 10 milliseconds
 
-		int ready = select(server_sock_id + 1, &readfds, NULL, NULL, &timeout);
-		if (ready < 0)
-		{
-			perror("Error in select.");
-			break;
-		}
-		else if (ready > 0)
-		{
+		// int ready = select(server_sock_id + 1, &readfds, NULL, NULL, &timeout);
+		// if (ready < 0)
+		// {
+		// 	perror("Error in select.");
+		// 	break;
+		// }
+		// else if (ready > 0)
+		// {
 			int com_sock_id = accept(server_sock_id, (struct sockaddr *)&client, &addrlen_remote);
 			if (com_sock_id < 0)
 			{
@@ -187,36 +187,36 @@ int main(int argc, char **argv)
 							break;
 						}
 					}
-					close(com_sock_id);
 				}
+				close(com_sock_id);
 			}
 
 			usleep(10000);
 			// sleep(1);
-		}
-
-		closeWebhouse();
-		printf("Close Webhouse\n");
-		fflush(stdout);
-
-		return EXIT_SUCCESS;
+		// }
 	}
+	closeWebhouse();
+	printf("Close Webhouse\n");
+	fflush(stdout);
 
-	/*******************************************************************************
-	 *  function :    shutdownHook
-	 ******************************************************************************/
-	/** \brief        Handle the registered signals (SIGTERM, SIGINT)
-	 *
-	 *  \type         static
-	 *
-	 *  \param[in]    sig    incoming signal
-	 *
-	 *  \return       void
-	 *
-	 ******************************************************************************/
-	static void shutdownHook(int32_t sig)
-	{
-		printf("Ctrl-C pressed....shutdown hook in main\n");
-		fflush(stdout);
-		eShutdown = TRUE;
-	}
+	return EXIT_SUCCESS;
+}
+
+/*******************************************************************************
+ *  function :    shutdownHook
+ ******************************************************************************/
+/** \brief        Handle the registered signals (SIGTERM, SIGINT)
+ *
+ *  \type         static
+ *
+ *  \param[in]    sig    incoming signal
+ *
+ *  \return       void
+ *
+ ******************************************************************************/
+static void shutdownHook(int32_t sig)
+{
+	printf("Ctrl-C pressed....shutdown hook in main\n");
+	fflush(stdout);
+	eShutdown = TRUE;
+}
