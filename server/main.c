@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	}
 
 	printf("Socket created succesfully\n");
-	
+
 	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
 	if (bind_status < 0)
 	{
@@ -176,6 +176,10 @@ int main(int argc, char **argv)
 							printf("response: %s\n", response);
 							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 						}
+					}
+					if (eShutdown == TRUE)
+					{
+						break;
 					}
 				}
 				close(com_sock_id);
