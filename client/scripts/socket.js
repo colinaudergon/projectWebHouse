@@ -5,7 +5,6 @@ let socket = null;
 // '
 function openConnection() {
   socket = new WebSocket("ws://192.168.2.100:8000");
-
   socket.onopen = function () {
     alert("connection has been established");
   }
