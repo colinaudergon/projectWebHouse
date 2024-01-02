@@ -1,6 +1,6 @@
 function openConnection() {
   // const url = `ws://${ip}:${port}`;
-  socket = new WebSocket ('ws://127.0.0.1:8000');
+  socket = new WebSocket ('ws://192.168.178.80:8000');
 
   socket.onopen = function () {
     alert("connection has been established");
