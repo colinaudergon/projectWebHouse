@@ -15,6 +15,7 @@ function openConnection() {
   }
 
   socket.onmessage = function (message) {
+    console.log("Received something");
     var textField  = document.getElementById("ReceivedDataID");
     textField.value = message.data;
   }
