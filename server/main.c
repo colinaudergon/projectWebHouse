@@ -138,61 +138,61 @@ int main(int argc, char **argv)
 		// }
 		// else if (ready > 0)
 		// {
-			int com_sock_id = accept(server_sock_id, (struct sockaddr *)&client, &addrlen_remote);
-			if (com_sock_id < 0)
-			{
-				perror("Error accepting connection");
-			}
-			else
-			{
-				printf("Accepted connection\n");
-				char rxBuf[RX_BUFFER_SIZE];
+		int com_sock_id = accept(server_sock_id, (struct sockaddr *)&client, &addrlen_remote);
+		if (com_sock_id < 0)
+		{
+			perror("Error accepting connection");
+		}
+		else
+		{
+			printf("Accepted connection\n");
+			char rxBuf[RX_BUFFER_SIZE];
 
-				/* Connection established, use newSock_id to communicate with client */
-				for (;;)
+			/* Connection established, use newSock_id to communicate with client */
+			for (;;)
+			{
+				int rx_data_len = recv(com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
+				if (rx_data_len > 0)
 				{
-					int rx_data_len = recv(com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
-					if (rx_data_len > 0)
+					rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
+					if (strncmp(rxBuf, "GET", 3) == 0)
+					{ // Yes -> create the handshake response and send it back
+						char response[WS_HS_ACCLEN];
+						get_handshake_response(rxBuf, response);
+						send(com_sock_id, (void *)response, strlen(response), 0);
+						printf("Handshake ok\n");
+					}
+					else if (rx_data_len == 0)
 					{
-						rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
-						if (strncmp(rxBuf, "GET", 3) == 0)
-						{ // Yes -> create the handshake response and send it back
-							char response[WS_HS_ACCLEN];
-							get_handshake_response(rxBuf, response);
-							send(com_sock_id, (void *)response, strlen(response), 0);
-							printf("Handshake ok\n");
-						}
-						else if (rx_data_len == 0)
-						{
-							printf("Client closed the connection\n");
-							// close(com_sock_id);
-							break;
-						}
-						/* No -> decode incoming message, process the command and send back an acknowledge message */
-						else
-						{
-							char command[rx_data_len];
-							decode_incoming_request(rxBuf, command);
-							command[strlen(command)] = '\0';
-							// processCommand(command);
-							char response[] = "<Command executed>";
-							char codedResponse[strlen(response) + 2];
-							code_outgoing_response(response, codedResponse);
-							printf("com_sock_id: %d\n", com_sock_id);
-							printf("response: %s\n", response);
-							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
-						}
-						if (eShutdown == TRUE)
-						{
-							break;
-						}
+						printf("Client closed the connection\n");
+						// close(com_sock_id);
+						break;
+					}
+					/* No -> decode incoming message, process the command and send back an acknowledge message */
+					else
+					{
+						char command[rx_data_len];
+						decode_incoming_request(rxBuf, command);
+						command[strlen(command)] = '\0';
+						// processCommand(command);
+						char response[] = "<Command executed>";
+						char codedResponse[strlen(response) + 2];
+						code_outgoing_response(response, codedResponse);
+						printf("com_sock_id: %d\n", com_sock_id);
+						printf("response: %s\n", response);
+						send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 					}
 				}
-				close(com_sock_id);
+				if (eShutdown == TRUE)
+				{
+					break;
+				}
 			}
+			close(com_sock_id);
+		}
 
-			usleep(10000);
-			// sleep(1);
+		usleep(10000);
+		// sleep(1);
 		// }
 	}
 	closeWebhouse();
