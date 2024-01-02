@@ -1,3 +1,4 @@
+@ -1,146 +1,184 @@
 /******************************************************************************/
 /** \file       startup.c
  *******************************************************************************
@@ -121,10 +122,11 @@ int main(int argc, char **argv) {
 		if (com_sock_id < 0) {
 			close(com_sock_id);
 		} else {
-		char rxBuf[RX_BUFFER_SIZE];						
+		char rxBuf[RX_BUFFER_SIZE];			
+		int rx_data_len = recv (com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
+			
 			/* Connection established, use newSock_id to communicate with client */
-			for(;;){		
-		        int rx_data_len = recv (com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
+			for(;;){
 				if (rx_data_len > 0) {
 					rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
 					if(strncmp(rxBuf, "GET", 3) == 0){ // Yes -> create the handshake response and send it back
@@ -146,9 +148,6 @@ int main(int argc, char **argv) {
 						printf("response: %s\n", response);
 						//send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 					}
-				}
-				if (rx_data_len == 0) {
-					break;
 				}
 			}   
 		}
