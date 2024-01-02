@@ -40,6 +40,7 @@ typedef int int32_t;
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>
+#include <sys/select.h>
 
 #include "jansson.h"
 #include "Webhouse.h"
@@ -118,43 +119,57 @@ int main(int argc, char **argv)
 	{
 		printf("Main Loop\n");
 		fflush(stdout);
-		int com_sock_id = accept(server_sock_id, (struct sockaddr *)&client, &addrlen_remote);
-		if (com_sock_id < 0)
-		{
-			perror("Error accepting connection");
-			close(com_sock_id);
-		}
-		else
-		{
-			char rxBuf[RX_BUFFER_SIZE];
 
-			/* Connection established, use newSock_id to communicate with client */
-			for (;;)
+		// CGPT
+		fd_set readfds;
+		FD_ZERO(&readfds);
+		FD_SET(server_sock_id, &readfds);
+		int ready = select(server_sock_id + 1, &readfds, NULL, NULL, &timeout);
+		if (ready < 0)
+		{
+			perror("Error in select.");
+			break;
+		}
+		else if (ready > 0)
+		{
+			int com_sock_id = accept(server_sock_id, (struct sockaddr *)&client, &addrlen_remote);
+			if (com_sock_id < 0)
 			{
-				int rx_data_len = recv(com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
-				if (rx_data_len > 0)
+				perror("Error accepting connection");
+				close(com_sock_id);
+			}
+			else
+			{
+				char rxBuf[RX_BUFFER_SIZE];
+
+				/* Connection established, use newSock_id to communicate with client */
+				for (;;)
 				{
-					rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
-					if (strncmp(rxBuf, "GET", 3) == 0)
-					{ // Yes -> create the handshake response and send it back
-						char response[WS_HS_ACCLEN];
-						get_handshake_response(rxBuf, response);
-						send(com_sock_id, (void *)response, strlen(response), 0);
-						printf("Handshake ok\n");
-					}
-					/* No -> decode incoming message, process the command and send back an acknowledge message */
-					else
+					int rx_data_len = recv(com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
+					if (rx_data_len > 0)
 					{
-						char command[rx_data_len];
-						decode_incoming_request(rxBuf, command);
-						command[strlen(command)] = '\0';
-						// processCommand(command);
-						char response[] = "<Command executed>";
-						char codedResponse[strlen(response) + 2];
-						code_outgoing_response(response, codedResponse);
-						printf("com_sock_id: %d\n", com_sock_id);
-						printf("response: %s\n", response);
-						// send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
+						rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
+						if (strncmp(rxBuf, "GET", 3) == 0)
+						{ // Yes -> create the handshake response and send it back
+							char response[WS_HS_ACCLEN];
+							get_handshake_response(rxBuf, response);
+							send(com_sock_id, (void *)response, strlen(response), 0);
+							printf("Handshake ok\n");
+						}
+						/* No -> decode incoming message, process the command and send back an acknowledge message */
+						else
+						{
+							char command[rx_data_len];
+							decode_incoming_request(rxBuf, command);
+							command[strlen(command)] = '\0';
+							// processCommand(command);
+							char response[] = "<Command executed>";
+							char codedResponse[strlen(response) + 2];
+							code_outgoing_response(response, codedResponse);
+							printf("com_sock_id: %d\n", com_sock_id);
+							printf("response: %s\n", response);
+							// send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
+						}
 					}
 				}
 			}

@@ -1,4 +1,5 @@
 function openConnection() {
+  // const url = `ws://${ip}:${port}`;
   socket = new WebSocket ('ws://127.0.0.1:8000');
 
   socket.onopen = function () {
@@ -21,7 +22,7 @@ function openConnection() {
 
 function closeConnection () {
   socket.close();
-  clearInterval(interval);
+  // clearInterval(interval);
 }
 
 function send() {
