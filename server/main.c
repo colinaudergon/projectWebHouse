@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 							code_outgoing_response(response, codedResponse);
 							printf("com_sock_id: %d\n", com_sock_id);
 							printf("response: %s\n", response);
-							// send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
+							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 						}
 					}
 				}
