@@ -162,6 +162,12 @@ int main(int argc, char **argv)
 							send(com_sock_id, (void *)response, strlen(response), 0);
 							printf("Handshake ok\n");
 						}
+						else if (rx_data_len == 0)
+						{
+							printf("Client closed the connection\n");
+							// close(com_sock_id);
+							break;
+						}
 						/* No -> decode incoming message, process the command and send back an acknowledge message */
 						else
 						{
@@ -176,42 +182,41 @@ int main(int argc, char **argv)
 							printf("response: %s\n", response);
 							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 						}
+						if (eShutdown == TRUE)
+						{
+							break;
+						}
 					}
-					if (eShutdown == TRUE)
-					{
-						break;
-					}
+					close(com_sock_id);
 				}
-				close(com_sock_id);
 			}
+
+			usleep(10000);
+			// sleep(1);
 		}
 
-		usleep(10000);
-		// sleep(1);
+		closeWebhouse();
+		printf("Close Webhouse\n");
+		fflush(stdout);
+
+		return EXIT_SUCCESS;
 	}
 
-	closeWebhouse();
-	printf("Close Webhouse\n");
-	fflush(stdout);
-
-	return EXIT_SUCCESS;
-}
-
-/*******************************************************************************
- *  function :    shutdownHook
- ******************************************************************************/
-/** \brief        Handle the registered signals (SIGTERM, SIGINT)
- *
- *  \type         static
- *
- *  \param[in]    sig    incoming signal
- *
- *  \return       void
- *
- ******************************************************************************/
-static void shutdownHook(int32_t sig)
-{
-	printf("Ctrl-C pressed....shutdown hook in main\n");
-	fflush(stdout);
-	eShutdown = TRUE;
-}
+	/*******************************************************************************
+	 *  function :    shutdownHook
+	 ******************************************************************************/
+	/** \brief        Handle the registered signals (SIGTERM, SIGINT)
+	 *
+	 *  \type         static
+	 *
+	 *  \param[in]    sig    incoming signal
+	 *
+	 *  \return       void
+	 *
+	 ******************************************************************************/
+	static void shutdownHook(int32_t sig)
+	{
+		printf("Ctrl-C pressed....shutdown hook in main\n");
+		fflush(stdout);
+		eShutdown = TRUE;
+	}
