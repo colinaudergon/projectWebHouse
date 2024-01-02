@@ -10,6 +10,7 @@
  *
  *  \remark     Last Modification
  *               \li fue1, November 2021, Created
+ * 				modified 02.01 11.28 (Colin)
  *
  ******************************************************************************/
 /*
@@ -90,29 +91,24 @@ int main(int argc, char **argv) {
 	fflush(stdout);
 
 	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if(server_sock_id >= 0);
-	else{
-		printf("Error: socket could not be openedr\r\n");
-		return -1;
-	}
+if (server_sock_id < 0) {
+    perror("Error: socket could not be opened");
+    return -1;
+}
 
-	bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
-	if(bind_status >= 0);
-	else{
-		close(server_sock_id);
-		printf("server socket id: %d\n", server_sock_id);
-		printf("Error: socket could not be bound\r\n");
-		return -1;
-	}
+bind_status = bind(server_sock_id, (struct sockaddr *)&server, addrlen);
+if (bind_status < 0) {
+    perror("Error: socket could not be bound");
+    close(server_sock_id);
+    return -1;
+}
 
-	listen_status = listen(server_sock_id, backlog);
-	if(listen_status >= 0);
-	else{
-		close(server_sock_id);
-		printf("Error: failed to listen\r\n");
-	}
-
-
+listen_status = listen(server_sock_id, backlog);
+if (listen_status < 0) {
+    perror("Error: failed to listen");
+    close(server_sock_id);
+    return -1;
+}
 
 	while (eShutdown == FALSE) {
 		printf("Main Loop\n");
@@ -122,10 +118,11 @@ int main(int argc, char **argv) {
 			close(com_sock_id);
 		} else {
 		char rxBuf[RX_BUFFER_SIZE];			
-		int rx_data_len = recv (com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
+		
 			
 			/* Connection established, use newSock_id to communicate with client */
 			for(;;){
+			int rx_data_len = recv (com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
 				if (rx_data_len > 0) {
 					rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
 					if(strncmp(rxBuf, "GET", 3) == 0){ // Yes -> create the handshake response and send it back
