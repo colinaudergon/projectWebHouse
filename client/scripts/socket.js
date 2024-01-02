@@ -23,6 +23,7 @@ function openConnection() {
 
 function closeConnection () {
   socket.close();
+  console.log("Disconnected");
 }
 
 function send() {
