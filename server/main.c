@@ -121,11 +121,10 @@ int main(int argc, char **argv) {
 		if (com_sock_id < 0) {
 			close(com_sock_id);
 		} else {
-		char rxBuf[RX_BUFFER_SIZE];			
-		int rx_data_len = recv (com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
-			
+		char rxBuf[RX_BUFFER_SIZE];						
 			/* Connection established, use newSock_id to communicate with client */
-			for(;;){
+			for(;;){		
+		        int rx_data_len = recv (com_sock_id, (void *)rxBuf, RX_BUFFER_SIZE, MSG_DONTWAIT);
 				if (rx_data_len > 0) {
 					rxBuf[rx_data_len] = '\0'; // Is the message a handshake request
 					if(strncmp(rxBuf, "GET", 3) == 0){ // Yes -> create the handshake response and send it back
@@ -147,6 +146,9 @@ int main(int argc, char **argv) {
 						printf("response: %s\n", response);
 						//send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 					}
+				}
+				if (rx_data_len == 0) {
+					break;
 				}
 			}   
 		}
