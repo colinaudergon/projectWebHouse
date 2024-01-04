@@ -42,7 +42,7 @@ typedef int int32_t;
 #include <sys/socketvar.h>
 #include <sys/select.h>
 
-#include "jansson.h"
+#include "jsmn.h"
 #include "Webhouse.h"
 #include "handshake.h"
 
@@ -52,11 +52,28 @@ typedef int int32_t;
 #define SERVER_PORT_NBR 8000
 #define RX_BUFFER_SIZE 1024
 
+#define TV 170
+#define RL 158
+#define SL 159
+#define L1 125
+#define L2 126
+#define HE 141
+#define TE 153
+#define AA 130
+#define READ 82
+#define WRITE 87
+
 //----- Function prototypes ----------------------------------------------------
 static void shutdownHook(int32_t sig);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
+
+//----- Command Processing -----------------------------------------------------
+int parsing_result;
+jsmn_parser parser;
+jsmntok_t tokens[8];
+jsmn_init(&parser);
 
 //----- Implementation ---------------------------------------------------------
 
@@ -174,6 +191,23 @@ int main(int argc, char **argv)
 							char command[rx_data_len];
 							decode_incoming_request(rxBuf, command);
 							command[strlen(command)] = '\0';
+
+							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
+							switch (parsing_result)
+							{
+							case JSMN_ERROR_INVAL:
+								printf("Error: bad token, JSON string is corrupted\r\n");
+								break;
+							case JSMN_ERROR_NOMEM:
+								printf("Error: not enough tokens, JSON string is too large\r\n");
+								break;
+							case JSMN_ERROR_PART:
+								printf("Error: JSON string is too short, expecting more JSON data\r\n");
+								break;
+							default:
+								processCommand(&command, &tokens);
+								break;
+							}
 							// processCommand(command);
 							char response[] = "<Command executed>";
 							char codedResponse[strlen(response) + 2];
@@ -219,4 +253,119 @@ static void shutdownHook(int32_t sig)
 	printf("Ctrl-C pressed....shutdown hook in main\n");
 	fflush(stdout);
 	eShutdown = TRUE;
+}
+
+/*******************************************************************************
+ *  function :    processCommand
+ ******************************************************************************/
+/** \brief      Handle the received command
+ *
+ *  \type       static
+ *
+ *  \param[in]  tokens Tokens after parsing the
+ *
+ *  \return		0 when write command executed successfully
+ * 				>= 1 when read command executed successfully
+ * 				< 0 when command failed	
+ *
+ ******************************************************************************/
+
+static int processCommand(char *input, jsmntok_t *tokens)
+{
+	int num_tokens = 2 * tokens[0].size;
+	char substrings[num_tokens][5];
+	// Extract substrings
+	int i = 0;
+	while (i < num_tokens)
+	{
+		if (extractSubstring(&substrings[i][0], &input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+			i++;
+	}
+
+	if (strcmp(&substrings[0], "cmd") != 0) return -1;
+	if (strcmp(&substrings[2], "dev") != 0) return -1;
+	if (strcmp(&substrings[4], "val") != 0) return -1;
+	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
+	int cmd_num = (int)substrings[1];
+	int val_num = 10*(int)substrings[5][0] + (int)substrings[5][1] - 11*'0';
+	if(val_num < 0 || val_num > 99) return -1;
+	
+
+	switch(cmd_num)
+		case READ:
+			switch (dev_num){
+			case TV:
+				return getTVState();
+				break;
+			case L1:
+				return getLED1State();
+				break;
+			case L2:
+				return getLED2State();
+				break;
+			case TE:
+				return getTemp();
+				break;
+			case HE:
+				return getHeatState();
+				break;
+			case AA:
+				return getAlarmState();
+				break;
+			}
+
+		case WRITE:
+			switch (dev_num){
+			case TV:
+				if(val_num == 0) turnTVOff();
+				else turnTVOn();
+				return 0;
+				break;
+			case RL:
+				dimRLamp(val_num);
+				return 0;
+				break;
+			case SL:
+				dimSLamp(val_num);
+				return 0;
+				break;
+			case L1:
+				if(val_num == 0) turnLED1Off();
+				else turnLED1On();
+				return 0;
+				break;
+			case L2:
+				if(val_num == 0) turnLED2Off();
+				else turnLED2On();
+				return 0;
+				break;
+			case HE:
+				if(val_num == 0) turnHeatOff();
+				else turnHeatOn();
+				return 0;
+				break;
+			}
+		break;
+	}
+}
+
+int extractSubstring(char *target, char *input, int start, int end, int maxsize)
+{
+	if (start < 0)
+		return -1;
+	else if (end < 0 || end <= start)
+		return -1;
+	else if (end - start > maxsize)
+		return -1;
+	else
+	{
+		int i = start;
+		while (i < end)
+		{
+			target[i - start] = input[i];
+			i++;
+		}
+		target[i - start] = '\0';
+	}
+	return i;
 }
