@@ -73,7 +73,6 @@ static volatile int eShutdown = FALSE;
 int parsing_result;
 jsmn_parser parser;
 jsmntok_t tokens[8];
-jsmn_init(&parser);
 
 //----- Implementation ---------------------------------------------------------
 
@@ -108,6 +107,9 @@ int main(int argc, char **argv)
 	initWebhouse();
 	printf("Init Webhouse\r\n");
 	fflush(stdout);
+
+	// json parser init
+	jsmn_init(&parser);
 
 	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (server_sock_id < 0)
@@ -191,6 +193,7 @@ int main(int argc, char **argv)
 							char command[rx_data_len];
 							decode_incoming_request(rxBuf, command);
 							command[strlen(command)] = '\0';
+							int rProcessCommand = NULL;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
 							switch (parsing_result)
@@ -205,7 +208,7 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								int rProcessCommand = processCommand(&command, &tokens);
+								rProcessCommand = processCommand(&command, &tokens);
 								break;
 							}
 							if (rProcessCommand == 0)
