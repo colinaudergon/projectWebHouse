@@ -213,18 +213,19 @@ int main(int argc, char **argv)
 								rProcessCommand = processCommand(&command, &tokens);
 								break;
 							}
+							// char response[100]; // Adjust the array size as needed
+
 							if (rProcessCommand == 0)
 							{
-								response[] = "<Write command executed successfully>";
+								strcpy(response, "<Write command executed successfully>");
 							}
 							else if (rProcessCommand > 0)
 							{
-
 								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
 							}
 							else
 							{
-								response[] = "<Command failed>";
+								strcpy(response, "<Command failed>");
 							}
 
 							char codedResponse[strlen(response) + 2];
