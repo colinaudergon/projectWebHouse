@@ -66,6 +66,7 @@ typedef int int32_t;
 //----- Function prototypes ----------------------------------------------------
 static void shutdownHook(int32_t sig);
 static int processCommand(char *input, jsmntok_t *tokens);
+int extractSubstring(char *target, char *input, int start, int end, int maxsize);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
@@ -210,7 +211,7 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								rProcessCommand = processCommand(&command, &tokens);
+								rProcessCommand = processCommand(command, &tokens);
 								break;
 							}
 
@@ -291,7 +292,7 @@ static void shutdownHook(int32_t sig)
 static int processCommand(char *input, jsmntok_t *tokens)
 {
 	int num_tokens = 2 * tokens[0].size;
-	char *substrings[num_tokens][5];
+	char substrings[num_tokens][5];
 	// Extract substrings
 	int i = 0;
 	while (i < num_tokens)
