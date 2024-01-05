@@ -205,16 +205,26 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								processCommand(&command, &tokens);
+								int rProcessCommand = processCommand(&command, &tokens);
 								break;
 							}
-							// processCommand(command);
-							char response[] = "<Command executed>";
+							if(rProcessCommand == 0){
+								char response[] = "<Write command executed successfully>";
+							}
+							else if(rProcessCommand > 0){
+								char response[100];
+								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
+							}
+							else {
+								char response[] = "<Command failed>";
+							}
+							
 							char codedResponse[strlen(response) + 2];
 							code_outgoing_response(response, codedResponse);
 							printf("com_sock_id: %d\n", com_sock_id);
 							printf("response: %s\n", response);
 							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
+							free(response);
 						}
 					}
 					if (eShutdown == TRUE)
