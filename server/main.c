@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 						/* No -> decode incoming message, process the command and send back an acknowledge message */
 						else
 						{
-							char command[rx_data_len];
+							char *command[rx_data_len];
 							char response[100];
 							decode_incoming_request(rxBuf, command);
 							command[strlen(command)] = '\0';
@@ -292,7 +292,7 @@ static void shutdownHook(int32_t sig)
 static int processCommand(char *input, jsmntok_t *tokens)
 {
 	int num_tokens = 2 * tokens[0].size;
-	char substrings[num_tokens][5];
+	char *substrings[num_tokens][5];
 	// Extract substrings
 	int i = 0;
 	while (i < num_tokens)
