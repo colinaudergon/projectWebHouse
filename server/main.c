@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								rProcessCommand = processCommand(command, &tokens);
+								rProcessCommand = processCommand(command, tokens);
 								break;
 							}
 
@@ -291,25 +291,30 @@ static void shutdownHook(int32_t sig)
 
 static int processCommand(char *input, jsmntok_t *tokens)
 {
+
 	int num_tokens = 2 * tokens[0].size;
 	char substrings[num_tokens][5];
+
 	// Extract substrings
 	int i = 0;
 	while (i < num_tokens)
 	{
-		if (extractSubstring(&substrings[i][0], &input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 			i++;
 	}
 
-	if (strcmp(&substrings[0], "cmd") != 0)
+	if (strcmp(substrings[0], "cmd") != 0)
 		return -1;
-	if (strcmp(&substrings[2], "dev") != 0)
+	if (strcmp(substrings[2], "dev") != 0)
 		return -1;
-	if (strcmp(&substrings[4], "val") != 0)
+	if (strcmp(substrings[4], "val") != 0)
 		return -1;
-	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
-	int cmd_num = (int)substrings[1];
-	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
+
+	int dev_num = atoi(substrings[3]);
+	int cmd_num = atoi(substrings[1]);
+	int val_num = atoi(substrings[5]);
+
+	// Perform additional validation if needed
 	if (val_num < 0 || val_num > 99)
 		return -1;
 
