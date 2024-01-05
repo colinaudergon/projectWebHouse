@@ -193,11 +193,11 @@ int main(int argc, char **argv)
 						{
 							char *command[rx_data_len];
 							char response[100];
-							decode_incoming_request(rxBuf, command);
-							command[strlen(command)] = '\0';
+							decode_incoming_request(rxBuf, &command);
+							command[strlen(&command)] = '\0';
 							int rProcessCommand = 0;
 
-							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
+							parsing_result = jsmn_parse(&parser, &command, strlen(&command), tokens, 8);
 							switch (parsing_result)
 							{
 							case JSMN_ERROR_INVAL:
