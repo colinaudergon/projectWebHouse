@@ -67,6 +67,7 @@ typedef int int32_t;
 static void shutdownHook(int32_t sig);
 static int processCommand(char *input, jsmntok_t *tokens);
 int extractSubstring(char *target, char *input, int start, int end, int maxsize);
+static void unbindSocket(int socket_fd);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
@@ -242,6 +243,7 @@ int main(int argc, char **argv)
 					}
 				}
 				close(com_sock_id);
+				unbindSocket(server_sock_id);
 			}
 
 			usleep(10000);
@@ -408,4 +410,19 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		target[i - start] = '\0';
 	}
 	return i;
+}
+// Function to unbind the address
+static void unbindSocket(int socket_fd)
+{
+    struct sockaddr_in server;
+    socklen_t addrlen = sizeof(struct sockaddr_in);
+
+    // Get the current socket address
+    if (getsockname(socket_fd, (struct sockaddr *)&server, &addrlen) == 0)
+    {
+        printf("Unbinding address %s:%d\n", inet_ntoa(server.sin_addr), ntohs(server.sin_port));
+        memset(&server, 0, sizeof(struct sockaddr_in));
+        server.sin_family = AF_UNSPEC;
+        bind(socket_fd, (struct sockaddr *)&server, sizeof(struct sockaddr_in));
+    }
 }
