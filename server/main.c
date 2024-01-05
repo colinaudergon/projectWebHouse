@@ -65,6 +65,7 @@ typedef int int32_t;
 
 //----- Function prototypes ----------------------------------------------------
 static void shutdownHook(int32_t sig);
+static int processCommand(char *input, jsmntok_t *tokens);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
@@ -191,6 +192,7 @@ int main(int argc, char **argv)
 						else
 						{
 							char command[rx_data_len];
+							char response[];
 							decode_incoming_request(rxBuf, command);
 							command[strlen(command)] = '\0';
 							int rProcessCommand = NULL;
@@ -213,16 +215,16 @@ int main(int argc, char **argv)
 							}
 							if (rProcessCommand == 0)
 							{
-								char response[] = "<Write command executed successfully>";
+								response[] = "<Write command executed successfully>";
 							}
 							else if (rProcessCommand > 0)
 							{
-								char response[100];
+
 								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
 							}
 							else
 							{
-								char response[] = "<Command failed>";
+								response = "<Command failed>";
 							}
 
 							char codedResponse[strlen(response) + 2];
