@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 							printf("com_sock_id: %d\n", com_sock_id);
 							printf("response: %s\n", response);
 							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
-							free(response);
+							// free(response);
 						}
 					}
 					if (eShutdown == TRUE)
