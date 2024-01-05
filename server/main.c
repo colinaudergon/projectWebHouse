@@ -191,13 +191,13 @@ int main(int argc, char **argv)
 						/* No -> decode incoming message, process the command and send back an acknowledge message */
 						else
 						{
-							char *command[rx_data_len];
+							char command[rx_data_len];
 							char response[100];
-							decode_incoming_request(rxBuf, &command);
-							command[strlen(&command)] = '\0';
+							decode_incoming_request(rxBuf, command);
+							command[strlen(command)] = '\0';
 							int rProcessCommand = 0;
 
-							parsing_result = jsmn_parse(&parser, &command, strlen(&command), tokens, 8);
+							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
 							switch (parsing_result)
 							{
 							case JSMN_ERROR_INVAL:
@@ -213,7 +213,6 @@ int main(int argc, char **argv)
 								rProcessCommand = processCommand(&command, &tokens);
 								break;
 							}
-							// char response[100]; // Adjust the array size as needed
 
 							if (rProcessCommand == 0)
 							{
