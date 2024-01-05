@@ -1,3 +1,4 @@
+
 function openConnection() {
   // const url = `ws://${ip}:${port}`;
   socket = new WebSocket ('ws://192.168.178.80:8000');
@@ -27,6 +28,7 @@ function closeConnection () {
 }
 
 function send() {
-  var textField  = document.getElementById("DataToSendID");
+  // var textField  = document.getElementById("DataToSendID");
+  var textField  = "{cmd:R/W,dev:TV/RL/SL/L1/L2/HE/TE/AA,val:0..99}";
   socket.send(textField.value);
 }

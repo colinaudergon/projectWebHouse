@@ -9,7 +9,6 @@ function openAddDevicePage() {
 
 window.onload = function() {
     loadPage('home','Home');
-    // openConnection();    
 };
 
 // Function to load content dynamically
