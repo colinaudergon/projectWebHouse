@@ -208,17 +208,20 @@ int main(int argc, char **argv)
 								int rProcessCommand = processCommand(&command, &tokens);
 								break;
 							}
-							if(rProcessCommand == 0){
+							if (rProcessCommand == 0)
+							{
 								char response[] = "<Write command executed successfully>";
 							}
-							else if(rProcessCommand > 0){
+							else if (rProcessCommand > 0)
+							{
 								char response[100];
 								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
 							}
-							else {
+							else
+							{
 								char response[] = "<Command failed>";
 							}
-							
+
 							char codedResponse[strlen(response) + 2];
 							code_outgoing_response(response, codedResponse);
 							printf("com_sock_id: %d\n", com_sock_id);
@@ -276,7 +279,7 @@ static void shutdownHook(int32_t sig)
  *
  *  \return		0 when write command executed successfully
  * 				>= 1 when read command executed successfully
- * 				< 0 when command failed	
+ * 				< 0 when command failed
  *
  ******************************************************************************/
 
@@ -292,75 +295,91 @@ static int processCommand(char *input, jsmntok_t *tokens)
 			i++;
 	}
 
-	if (strcmp(&substrings[0], "cmd") != 0) return -1;
-	if (strcmp(&substrings[2], "dev") != 0) return -1;
-	if (strcmp(&substrings[4], "val") != 0) return -1;
+	if (strcmp(&substrings[0], "cmd") != 0)
+		return -1;
+	if (strcmp(&substrings[2], "dev") != 0)
+		return -1;
+	if (strcmp(&substrings[4], "val") != 0)
+		return -1;
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1];
-	int val_num = 10*(int)substrings[5][0] + (int)substrings[5][1] - 11*'0';
-	if(val_num < 0 || val_num > 99) return -1;
-	
+	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
+	if (val_num < 0 || val_num > 99)
+		return -1;
 
-	switch(cmd_num)
-		case READ:
-			switch (dev_num){
-			case TV:
-				return getTVState();
-				break;
-			case L1:
-				return getLED1State();
-				break;
-			case L2:
-				return getLED2State();
-				break;
-			case TE:
-				return getTemp();
-				break;
-			case HE:
-				return getHeatState();
-				break;
-			case AA:
-				return getAlarmState();
-				break;
-			}
+	switch (cmd_num)
+	{
+	case READ:
+		switch (dev_num)
+		{
+		case TV:
+			return getTVState();
+			break;
+		case L1:
+			return getLED1State();
+			break;
+		case L2:
+			return getLED2State();
+			break;
+		case TE:
+			return getTemp();
+			break;
+		case HE:
+			return getHeatState();
+			break;
+		case AA:
+			return getAlarmState();
+			break;
+		}
+		break;
 
-		case WRITE:
-			switch (dev_num){
-			case TV:
-				if(val_num == 0) turnTVOff();
-				else turnTVOn();
-				return 0;
-				break;
-			case RL:
-				dimRLamp(val_num);
-				return 0;
-				break;
-			case SL:
-				dimSLamp(val_num);
-				return 0;
-				break;
-			case L1:
-				if(val_num == 0) turnLED1Off();
-				else turnLED1On();
-				return 0;
-				break;
-			case L2:
-				if(val_num == 0) turnLED2Off();
-				else turnLED2On();
-				return 0;
-				break;
-			case HE:
-				if(val_num == 0) turnHeatOff();
-				else turnHeatOn();
-				return 0;
-				break;
-			}
+	case WRITE:
+		switch (dev_num)
+		{
+		case TV:
+			if (val_num == 0)
+				turnTVOff();
+			else
+				turnTVOn();
+			return 0;
+			break;
+		case RL:
+			dimRLamp(val_num);
+			return 0;
+			break;
+		case SL:
+			dimSLamp(val_num);
+			return 0;
+			break;
+		case L1:
+			if (val_num == 0)
+				turnLED1Off();
+			else
+				turnLED1On();
+			return 0;
+			break;
+		case L2:
+			if (val_num == 0)
+				turnLED2Off();
+			else
+				turnLED2On();
+			return 0;
+			break;
+		case HE:
+			if (val_num == 0)
+				turnHeatOff();
+			else
+				turnHeatOn();
+			return 0;
+			break;
+		}
 		break;
 	}
 }
 
 int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
+	int i = 0;
 	if (start < 0)
 		return -1;
 	else if (end < 0 || end <= start)
@@ -369,7 +388,7 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		return -1;
 	else
 	{
-		int i = start;
+		i = start;
 		while (i < end)
 		{
 			target[i - start] = input[i];
