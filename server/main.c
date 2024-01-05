@@ -195,7 +195,7 @@ int main(int argc, char **argv)
 							char response[100];
 							decode_incoming_request(rxBuf, command);
 							command[strlen(command)] = '\0';
-							int rProcessCommand = NULL;
+							int rProcessCommand = 0;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
 							switch (parsing_result)
