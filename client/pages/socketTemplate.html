@@ -3,14 +3,28 @@
 		<tr>
 			<td>Data to send</td>
 			<td>Received data</td>
+			<td>server IP address</td>
 		</tr>
 		<tr>
 			<td><textarea id="DataToSendID" cols="40" rows="10"></textarea></td>
 			<td><textarea id="ReceivedDataID" cols="40" rows="10"></textarea></td>
+			<td><textarea id="ServerIP" cols="40" rows="10"></textarea></td>
 		</tr>
 	</table>
 	<input type="button" value="connect"    onclick="openConnection()">
 	<input type="button" value="disconnect" onclick="closeConnection()">
-	<input type="button" value="send"       onclick="send()">
-</div>
 
+	<input type="button" value="send"       onclick="send()"> <br>
+	
+    <input type="button" value="sendTV"       onclick="send()"><br>
+    <input type="button" value="sendLampR"       onclick="send()"><br>
+    <input type="button" value="sendLampS"       onclick="send()"><br>
+
+    <input type="button" value="sendLed1StateOn"       onclick="send()"><br>
+    <input type="button" value="sendLed1StateOff"       onclick="send()"><br>
+
+    <input type="button" value="sendLed2StateOn"       onclick="send()"><br>
+    <input type="button" value="sendLed2StateOff"       onclick="send()"><br>
+
+    <input type="button" value="readTemp"       onclick="send()"><br>
+</div>

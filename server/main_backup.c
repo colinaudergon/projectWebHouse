@@ -65,9 +65,6 @@ typedef int int32_t;
 
 //----- Function prototypes ----------------------------------------------------
 static void shutdownHook(int32_t sig);
-static int processCommand(char *input, jsmntok_t *tokens);
-int extractSubstring(char *target, char *input, int start, int end, int maxsize);
-static void unbindSocket(int socket_fd);
 
 //----- Data -------------------------------------------------------------------
 static volatile int eShutdown = FALSE;
@@ -76,6 +73,7 @@ static volatile int eShutdown = FALSE;
 int parsing_result;
 jsmn_parser parser;
 jsmntok_t tokens[8];
+jsmn_init(&parser);
 
 //----- Implementation ---------------------------------------------------------
 
@@ -110,9 +108,6 @@ int main(int argc, char **argv)
 	initWebhouse();
 	printf("Init Webhouse\r\n");
 	fflush(stdout);
-
-	// json parser init
-	jsmn_init(&parser);
 
 	server_sock_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (server_sock_id < 0)
@@ -194,10 +189,8 @@ int main(int argc, char **argv)
 						else
 						{
 							char command[rx_data_len];
-							char response[100];
 							decode_incoming_request(rxBuf, command);
 							command[strlen(command)] = '\0';
-							int rProcessCommand = 0;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
 							switch (parsing_result)
@@ -212,29 +205,26 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								rProcessCommand = processCommand(command, tokens);
+								int rProcessCommand = processCommand(&command, &tokens);
 								break;
 							}
-
-							if (rProcessCommand == 0)
-							{
-								strcpy(response, "<Write command executed successfully>");
+							if(rProcessCommand == 0){
+								char response[] = "<Write command executed successfully>";
 							}
-							else if (rProcessCommand > 0)
-							{
+							else if(rProcessCommand > 0){
+								char response[100];
 								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
 							}
-							else
-							{
-								strcpy(response, "<Command failed>");
+							else {
+								char response[] = "<Command failed>";
 							}
-
+							
 							char codedResponse[strlen(response) + 2];
 							code_outgoing_response(response, codedResponse);
 							printf("com_sock_id: %d\n", com_sock_id);
 							printf("response: %s\n", response);
 							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
-							// free(response);
+							free(response);
 						}
 					}
 					if (eShutdown == TRUE)
@@ -243,7 +233,6 @@ int main(int argc, char **argv)
 					}
 				}
 				close(com_sock_id);
-				unbindSocket(server_sock_id);
 			}
 
 			usleep(10000);
@@ -287,25 +276,22 @@ static void shutdownHook(int32_t sig)
  *
  *  \return		0 when write command executed successfully
  * 				>= 1 when read command executed successfully
- * 				< 0 when command failed
+ * 				< 0 when command failed	
  *
  ******************************************************************************/
 
 static int processCommand(char *input, jsmntok_t *tokens)
 {
-
 	int num_tokens = 2 * tokens[0].size;
 	char substrings[num_tokens][5];
-
 	// Extract substrings
 	int i = 0;
 	while (i < num_tokens)
 	{
-		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+		if (extractSubstring(&substrings[i][0], &input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 			i++;
 	}
 
-<<<<<<< HEAD
 	if (strcmp(&substrings[0], "cmd") != 0) return -1;
 	if (strcmp(&substrings[2], "dev") != 0) return -1;
 	if (strcmp(&substrings[4], "val") != 0) return -1;
@@ -337,96 +323,44 @@ static int processCommand(char *input, jsmntok_t *tokens)
 				return getAlarmState();
 				break;
 			}
-=======
-	if (strcmp(substrings[0], "cmd") != 0)
-		return -1;
-	if (strcmp(substrings[2], "dev") != 0)
-		return -1;
-	if (strcmp(substrings[4], "val") != 0)
-		return -1;
 
-	int dev_num = atoi(substrings[3]);
-	int cmd_num = atoi(substrings[1]);
-	int val_num = atoi(substrings[5]);
->>>>>>> origin/main
-
-	// Perform additional validation if needed
-	if (val_num < 0 || val_num > 99)
-		return -1;
-
-	switch (cmd_num)
-	{
-	case READ:
-		switch (dev_num)
-		{
-		case TV:
-			return getTVState();
-			break;
-		case L1:
-			return getLED1State();
-			break;
-		case L2:
-			return getLED2State();
-			break;
-		case TE:
-			return getTemp();
-			break;
-		case HE:
-			return getHeatState();
-			break;
-		case AA:
-			return getAlarmState();
-			break;
-		}
-		break;
-
-	case WRITE:
-		switch (dev_num)
-		{
-		case TV:
-			if (val_num == 0)
-				turnTVOff();
-			else
-				turnTVOn();
-			return 0;
-			break;
-		case RL:
-			dimRLamp(val_num);
-			return 0;
-			break;
-		case SL:
-			dimSLamp(val_num);
-			return 0;
-			break;
-		case L1:
-			if (val_num == 0)
-				turnLED1Off();
-			else
-				turnLED1On();
-			return 0;
-			break;
-		case L2:
-			if (val_num == 0)
-				turnLED2Off();
-			else
-				turnLED2On();
-			return 0;
-			break;
-		case HE:
-			if (val_num == 0)
-				turnHeatOff();
-			else
-				turnHeatOn();
-			return 0;
-			break;
-		}
+		case WRITE:
+			switch (dev_num){
+			case TV:
+				if(val_num == 0) turnTVOff();
+				else turnTVOn();
+				return 0;
+				break;
+			case RL:
+				dimRLamp(val_num);
+				return 0;
+				break;
+			case SL:
+				dimSLamp(val_num);
+				return 0;
+				break;
+			case L1:
+				if(val_num == 0) turnLED1Off();
+				else turnLED1On();
+				return 0;
+				break;
+			case L2:
+				if(val_num == 0) turnLED2Off();
+				else turnLED2On();
+				return 0;
+				break;
+			case HE:
+				if(val_num == 0) turnHeatOff();
+				else turnHeatOn();
+				return 0;
+				break;
+			}
 		break;
 	}
 }
 
 int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
-	int i = 0;
 	if (start < 0)
 		return -1;
 	else if (end < 0 || end <= start)
@@ -435,7 +369,7 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		return -1;
 	else
 	{
-		i = start;
+		int i = start;
 		while (i < end)
 		{
 			target[i - start] = input[i];
@@ -444,19 +378,4 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		target[i - start] = '\0';
 	}
 	return i;
-}
-// Function to unbind the address
-static void unbindSocket(int socket_fd)
-{
-    struct sockaddr_in server;
-    socklen_t addrlen = sizeof(struct sockaddr_in);
-
-    // Get the current socket address
-    if (getsockname(socket_fd, (struct sockaddr *)&server, &addrlen) == 0)
-    {
-        printf("Unbinding address %s:%d\n", inet_ntoa(server.sin_addr), ntohs(server.sin_port));
-        memset(&server, 0, sizeof(struct sockaddr_in));
-        server.sin_family = AF_UNSPEC;
-        bind(socket_fd, (struct sockaddr *)&server, sizeof(struct sockaddr_in));
-    }
 }
