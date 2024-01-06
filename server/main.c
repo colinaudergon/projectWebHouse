@@ -305,57 +305,16 @@ static int processCommand(char *input, jsmntok_t *tokens)
 			i++;
 	}
 
-<<<<<<< HEAD
 	if (strcmp(&substrings[0], "cmd") != 0) return -1;
 	if (strcmp(&substrings[2], "dev") != 0) return -1;
 	if (strcmp(&substrings[4], "val") != 0) return -1;
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1][0];
 	int val_num = 10*(int)substrings[5][0] + (int)substrings[5][1] - 11*'0';
-	if(val_num < 0 || val_num > 99) return -1;
-	
-
-	switch(cmd_num){
-		case READ:
-			switch (dev_num){
-			case TV:
-				return getTVState();
-				break;
-			case L1:
-				return getLED1State();
-				break;
-			case L2:
-				return getLED2State();
-				break;
-			case TE:
-				return getTemp();
-				break;
-			case HE:
-				return getHeatState();
-				break;
-			case AA:
-				return getAlarmState();
-				break;
-			}
-=======
-	if (strcmp(substrings[0], "cmd") != 0)
-		return -1;
-	if (strcmp(substrings[2], "dev") != 0)
-		return -1;
-	if (strcmp(substrings[4], "val") != 0)
-		return -1;
-
-	int dev_num = atoi(substrings[3]);
-	int cmd_num = atoi(substrings[1]);
-	int val_num = atoi(substrings[5]);
->>>>>>> origin/main
-
 	// Perform additional validation if needed
-	if (val_num < 0 || val_num > 99)
-		return -1;
+	if(val_num < 0 || val_num > 99) return -1;
 
-	switch (cmd_num)
-	{
+	switch (cmd_num){
 	case READ:
 		switch (dev_num)
 		{
