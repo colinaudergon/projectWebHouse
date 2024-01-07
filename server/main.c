@@ -193,6 +193,7 @@ int main(int argc, char **argv)
 						/* No -> decode incoming message, process the command and send back an acknowledge message */
 						else
 						{
+							printf("Rxbuffer: %s\n",rxBuf);
 							char command[rx_data_len];
 							char response[100];
 							decode_incoming_request(rxBuf, command);
@@ -227,6 +228,7 @@ int main(int argc, char **argv)
 							}
 							else
 							{
+								printf("rProcess value: %d\n",rProcessCommand);
 								strcpy(response, "<Command failed>");
 							}
 
