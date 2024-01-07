@@ -330,10 +330,10 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	int cmd_num = (int)substrings[1][0];
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 
-	//ToDo: correct for ascii code code
-	// int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
-	int val_num = 10 * ((int)substrings[5][0]-'0') + (int)substrings[5][1]-'0';
-
+	// ToDo: correct for ascii code code
+	//  int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
+	//  int val_num = 10 * ((int)substrings[5][0]-'0') + (int)substrings[5][1]-'0';
+	int val_num = ((int)substrings[5][0] - '0');
 	printf("Val num: %d\n", val_num);
 	//  if (val_num < 0 || val_num > 99)
 	//  {
@@ -341,14 +341,14 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	//  	return -1;
 	//  }
 
-//Change process command -> read/write output are biased
+	// Change process command -> read/write output are biased
 	switch (cmd_num)
 	{
 	case READ:
 		switch (dev_num)
 		{
 		case TV:
-			return 1 +  getTVState();
+			return 1 + getTVState();
 			break;
 		case L1:
 			return 1 + getLED1State();
@@ -360,7 +360,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 			return 1 + getTemp();
 			break;
 		case HE:
-			return 1 +  getHeatState();
+			return 1 + getHeatState();
 			break;
 		case AA:
 			return 1 + getAlarmState();
