@@ -31,7 +31,8 @@ function closeConnection () {
 }
 
 function send() {
-  // var textField  = document.getElementById("DataToSendID");
-  var textField  = "{cmd:R,dev:TV,val:0}";
+  var textField  = document.getElementById("DataToSendID");
+  console.log(textField.value);
+  // var textField  = "{cmd:R,dev:TV,val:0}";
   socket.send(textField.value);
 }
