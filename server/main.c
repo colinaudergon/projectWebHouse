@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								rProcessCommand = processCommand(&command, tokens);
+								rProcessCommand = processCommand(command, tokens);
 								break;
 							}
 
