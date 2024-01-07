@@ -441,6 +441,7 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		target[i - start] = '\0';
 	}
 	printf("Target result: %s\n", target);
+	printf("value of I from exctract substring: %d\n",i);
 	return i;
 }
 // Function to unbind the address
