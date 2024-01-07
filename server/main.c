@@ -413,7 +413,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	}
 }
 // extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
-int extractSubstring(const char *target, char *input, int start, int end, int maxsize)
+int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
 	int i = 0;
 	printf("Start: %d\n", start);
