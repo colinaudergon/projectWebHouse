@@ -193,10 +193,11 @@ int main(int argc, char **argv)
 						/* No -> decode incoming message, process the command and send back an acknowledge message */
 						else
 						{
-							printf("Rxbuffer: %s\n",rxBuf);
+
 							char command[rx_data_len];
+							printf("Command: %s\n", command);
 							char response[100];
-							decode_incoming_request(rxBuf, command);
+							decode_incoming_request(rxBuf, command); // RxBuffer is garbage here
 							command[strlen(command)] = '\0';
 							int rProcessCommand = 0;
 
@@ -228,7 +229,7 @@ int main(int argc, char **argv)
 							}
 							else
 							{
-								printf("rProcess value: %d\n",rProcessCommand);
+								printf("rProcess value: %d\n", rProcessCommand);
 								strcpy(response, "<Command failed>");
 							}
 
@@ -305,28 +306,43 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	while (i < num_tokens)
 	{
 		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+		{
+			printf("Substring[i][0]: %s\n", substrings[i][0]);
 			i++;
+		}
 	}
-	printf("Value of counter I: %d\n",i);
+
+	printf("Value of counter I: %d\n", i);
 	printf("Substring 0: %s\n ", substrings[0]);
 	printf("Substring 2: %s\n", substrings[2]);
 	printf("Substring 4: %s\n ", substrings[4]);
 
 	if (strcmp(substrings[0], "cmd") != 0)
+	{
 		return -1;
+	}
 	if (strcmp(substrings[2], "dev") != 0)
+	{
 		return -1;
+	}
 	if (strcmp(substrings[4], "val") != 0)
+	{
 		return -1;
+	}
 
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1][0];
 	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
 
 	// Perform additional validation if needed
+	printf("Val num: %d", val_num);
 	if (val_num < 0 || val_num > 99)
+	{
+		printf("Did not passed the validation");
 		return -1;
+	}
 
+	printf("Passed the validation");
 	switch (cmd_num)
 	{
 	case READ:
@@ -404,11 +420,17 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
 	int i = 0;
 	if (start < 0)
+	{
 		return -1;
+	}
 	else if (end < 0 || end <= start)
+	{
 		return -1;
+	}
 	else if (end - start > maxsize)
+	{
 		return -1;
+	}
 	else
 	{
 		printf("Target before processing: %s\n", target[i - start]);

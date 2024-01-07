@@ -55,7 +55,7 @@ static int get_handshake_accept(char *wsKey, unsigned char **dest)
     if (!wsKey)
         return (-1);
 
-    str = (char *) calloc(1, sizeof(char) * (WS_KEY_LEN + WS_MS_LEN + 1));
+    str = (char *)calloc(1, sizeof(char) * (WS_KEY_LEN + WS_MS_LEN + 1));
     if (!str)
         return (-1);
 
@@ -106,8 +106,8 @@ int get_handshake_response(char hsrequest[], char hsresponse[])
         return (-1);
 
     saveptr = NULL;
-    s       = strtok_r(s, " ", &saveptr);
-    s       = strtok_r(NULL, " ", &saveptr);
+    s = strtok_r(s, " ", &saveptr);
+    s = strtok_r(NULL, " ", &saveptr);
 
     ret = get_handshake_accept(s, &accept);
     if (ret < 0)
@@ -121,44 +121,55 @@ int get_handshake_response(char hsrequest[], char hsresponse[])
     return (0);
 }
 
-int decode_incoming_request (char coded_request[], char request[]){
+int decode_incoming_request(char coded_request[], char request[])
+{
     // read the number of received data bytes
     int size = (coded_request[1] & 0x3F);
-    
-    if (size == 0) {
+
+    if (size == 0)
+    {
         return (-1);
     }
-    
+
     // check if the incomming request is coded
     printf(" if the incomming request is coded\n");
-    if (coded_request[1] & 0x80) {
+    if (coded_request[1] & 0x80)
+    {
         // yes: then decode request
         printf("yes: then decode request.\n");
         char masks[4] = {coded_request[2], coded_request[3], coded_request[4], coded_request[5]};
         int i;
-        for (i = 0; i < size; i++) {
-            request[i] = coded_request[i+6] ^ masks[i%4];
+        for (i = 0; i < size; i++)
+        {
+            request[i] = coded_request[i + 6] ^ masks[i % 4];
         }
         request[i] = 0;
     }
-    else {
-        // no: then remove only the 2 first bytes of request 
+    else
+    {
+        // no: then remove only the 2 first bytes of request
         printf("no: then remove only the 2 first bytes of request.\n");
         int i;
-        for (i = 0; i < size; i++) {
-            request[i] = coded_request[i+2];
+        for (i = 0; i < size; i++)
+        {
+            request[i] = coded_request[i + 2];
         }
         request[i] = 0;
     }
-
+    printf("Size: %d\n", size);
     return (size);
 }
 
-int code_outgoing_response (char response[], char coded_response[]){
+// Attention :
+//  l’array  « request »  doit  avoir  la  même  taille  que  l’array  « coded_respons »,  alors  que
+//  l’array « coded_response » doit être deux bytes plus grand de l’array «respons».
+int code_outgoing_response(char response[], char coded_response[])
+{
     // read the number of data bytes to send
-    int size = strlen (response);
-    
-    if (size == 0) {
+    int size = strlen(response);
+
+    if (size == 0)
+    {
         return (-1);
     }
 
@@ -167,6 +178,6 @@ int code_outgoing_response (char response[], char coded_response[]){
     coded_response[1] = size;
     coded_response[2] = 0;
     strcat(coded_response, response);
-
+    printf("Size outgoing response: %d\n", size);
     return (size);
 }
