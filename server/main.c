@@ -300,9 +300,12 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	// Extract substrings
 	int i = 0;
 	printf("value of num_token: %d\n",num_tokens);
+	int extractResult;
 	while (i < num_tokens)
-	{
-		if (extractSubstring(substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+	{	
+		extractResult = extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5);
+		printf("Exctract result: %d\n",extractResult);
+		if ( extractResult > 0)
 		{
 			printf("Substring[i][0]: %s\n", substrings[i][0]);
 			i++;
@@ -417,6 +420,7 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
 	int i = 0;
 	printf("Start: %d\n", start);
+	printf("End: %d\n", end);
 	if (start < 0)
 	{
 		return -1;
@@ -439,8 +443,8 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		}
 		target[i - start] = '\0';
 	}
-	printf("Target result: %s\n", target);
-	printf("value of I from exctract substring: %d\n",i);
+	// printf("Target result: %s\n", target);
+	// printf("value of I from exctract substring: %d\n",i);
 	return i;
 }
 // Function to unbind the address
