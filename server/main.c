@@ -299,6 +299,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 
 	// Extract substrings
 	int i = 0;
+	printf("value of num_token: %d\n",num_tokens);
 	while (i < num_tokens)
 	{
 		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
