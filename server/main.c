@@ -216,11 +216,11 @@ int main(int argc, char **argv)
 
 							if (rProcessCommand == 0)
 							{
-								strcpy(response, "<Write command executed successfully>");
+								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
 							}
 							else if (rProcessCommand > 0)
 							{
-								sprintf(response, "<Read command executed successfully: val = %d>", rProcessCommand);
+								strcpy(response, "<Write command executed successfully>");
 							}
 							else
 							{
