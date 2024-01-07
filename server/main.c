@@ -310,9 +310,9 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		}
 	}
 
-	printf("Substring 0: %s\n", substrings[0]);
-	printf("Substring 2: %s\n", substrings[2]);
-	printf("Substring 4: %s\n", substrings[4]);
+	// printf("Substring 0: %s\n", substrings[0]);
+	// printf("Substring 2: %s\n", substrings[2]);
+	// printf("Substring 4: %s\n", substrings[4]);
 
 	if (strcmp(substrings[0], "cmd") != 0)
 	{
@@ -329,45 +329,41 @@ static int processCommand(char *input, jsmntok_t *tokens)
 
 	int cmd_num = (int)substrings[1][0];
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
-	printf("Value of cmd_num: %d\n", cmd_num);
-	printf("Value of dev_num: %d\n", dev_num);
-	printf("What is val_num: %c\n", (substrings[5][0]));
-	printf("What is val_num: %d\n", (10 * (int)substrings[5][0]));
-	// int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
-	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1];
 
-	// Perform additional validation if needed
+	//ToDo: correct for ascii code code
+	// int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
+	int val_num = 10 * ((int)substrings[5][0]-'0') + (int)substrings[5][1]-'0';
+
 	printf("Val num: %d\n", val_num);
-	// correct for ascii code code
 	//  if (val_num < 0 || val_num > 99)
 	//  {
 	//  	printf("Did not passed the validation");
 	//  	return -1;
 	//  }
 
-	printf("Passed the validation\n");
+//Change process command -> read/write output are biased
 	switch (cmd_num)
 	{
 	case READ:
 		switch (dev_num)
 		{
 		case TV:
-			return getTVState();
+			return 1 +  getTVState();
 			break;
 		case L1:
-			return getLED1State();
+			return 1 + getLED1State();
 			break;
 		case L2:
-			return getLED2State();
+			return 1 + getLED2State();
 			break;
 		case TE:
-			return getTemp();
+			return 1 + getTemp();
 			break;
 		case HE:
-			return getHeatState();
+			return 1 +  getHeatState();
 			break;
 		case AA:
-			return getAlarmState();
+			return 1 + getAlarmState();
 			break;
 		}
 		break;
