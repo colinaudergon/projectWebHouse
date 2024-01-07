@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 							decode_incoming_request(rxBuf, command); // RxBuffer is garbage here,and command is "empty"
 							command[strlen(command)] = '\0';
 							printf("Command: %s\n", command);
-							printf("rxBuffer: %s\n", rxBuff);
+							printf("rxBuffer: %s\n", rxBuf);
 							int rProcessCommand = 0;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
