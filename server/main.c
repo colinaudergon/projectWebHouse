@@ -200,6 +200,7 @@ int main(int argc, char **argv)
 							int rProcessCommand = 0;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
+							printf("Parsing result: %d\n",parsing_result);
 							switch (parsing_result)
 							{
 							case JSMN_ERROR_INVAL:
@@ -304,7 +305,9 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 			i++;
 	}
-
+	printf("Substring 0: %s\n ",&substrings[0]);
+	printf("Substring 2: %s\n",&substrings[2]);
+	printf("Substring 4: %s\n ",&substrings[4]);
 	if (strcmp(&substrings[0], "cmd") != 0) return -1;
 	if (strcmp(&substrings[2], "dev") != 0) return -1;
 	if (strcmp(&substrings[4], "val") != 0) return -1;
