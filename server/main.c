@@ -299,15 +299,14 @@ static int processCommand(char *input, jsmntok_t *tokens)
 
 	// Extract substrings
 	int i = 0;
-	printf("value of num_token: %d\n",num_tokens);
+	// printf("value of num_token: %d\n",num_tokens);
 	int extractResult;
 	while (i < num_tokens)
-	{	
+	{
 		extractResult = extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5);
-		printf("Exctract result: %d\n",extractResult);
-		if ( extractResult > 0)
+		// printf("Exctract result: %d\n",extractResult);
+		if (extractResult > 0)
 		{
-			// printf("Substring[i][0]: %s\n", substrings[i][0]);
 			i++;
 		}
 	}
@@ -332,10 +331,11 @@ static int processCommand(char *input, jsmntok_t *tokens)
 
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1][0];
+	printf("What is val_num: %d\n", (10 * (int)substrings[5][0]));
 	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
 
 	// Perform additional validation if needed
-	printf("Val num: %d", val_num);
+	printf("Val num: %d\n", val_num);
 	if (val_num < 0 || val_num > 99)
 	{
 		printf("Did not passed the validation");
