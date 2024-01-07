@@ -305,8 +305,8 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 			i++;
 	}
-	printf("Value of co")
-		printf("Substring 0: %s\n ", substrings[0]);
+	printf("Value of counter I: %d\n",i);
+	printf("Substring 0: %s\n ", substrings[0]);
 	printf("Substring 2: %s\n", substrings[2]);
 	printf("Substring 4: %s\n ", substrings[4]);
 
@@ -392,7 +392,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 			break;
 		}
 		break;
-	case default:
+	default:
 		printf("Neither Read or Write commad: error");
 		break;
 	}
