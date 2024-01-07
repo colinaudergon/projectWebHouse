@@ -307,7 +307,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		printf("Exctract result: %d\n",extractResult);
 		if ( extractResult > 0)
 		{
-			printf("Substring[i][0]: %s\n", substrings[i][0]);
+			// printf("Substring[i][0]: %s\n", substrings[i][0]);
 			i++;
 		}
 	}
