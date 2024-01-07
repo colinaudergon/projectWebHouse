@@ -448,7 +448,7 @@ JSMN_API int jsmn_parse(jsmn_parser *parser, const char *js, const size_t len,
       }
     }
   }
-
+  printf("In json parser count value; %d\n",count);
   return count;
 }
 
