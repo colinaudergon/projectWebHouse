@@ -184,21 +184,16 @@ int main(int argc, char **argv)
 							send(com_sock_id, (void *)response, strlen(response), 0);
 							printf("Handshake ok\n");
 						}
-						else if (rx_data_len == 0)
-						{
-							printf("Client closed the connection\n");
-							// close(com_sock_id);
-							break;
-						}
 						/* No -> decode incoming message, process the command and send back an acknowledge message */
 						else
 						{
 
 							char command[rx_data_len];
-							printf("Command: %s\n", command);
 							char response[100];
-							decode_incoming_request(rxBuf, command); // RxBuffer is garbage here
+							decode_incoming_request(rxBuf, command); // RxBuffer is garbage here,and command is "empty"
 							command[strlen(command)] = '\0';
+							printf("Command: %s\n", command);
+							printf("rxBuffer: %s\n", rxBuff);
 							int rProcessCommand = 0;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
@@ -215,7 +210,7 @@ int main(int argc, char **argv)
 								printf("Error: JSON string is too short, expecting more JSON data\r\n");
 								break;
 							default:
-								rProcessCommand = processCommand(command, tokens);
+								rProcessCommand = processCommand(&command, tokens);
 								break;
 							}
 
@@ -237,6 +232,7 @@ int main(int argc, char **argv)
 							code_outgoing_response(response, codedResponse);
 							printf("com_sock_id: %d\n", com_sock_id);
 							printf("response: %s\n", response);
+							printf("\n\n");
 							send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
 							// free(response);
 						}
@@ -313,9 +309,9 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	}
 
 	printf("Value of counter I: %d\n", i);
-	printf("Substring 0: %s\n ", substrings[0]);
+	printf("Substring 0: %s\n", substrings[0]);
 	printf("Substring 2: %s\n", substrings[2]);
-	printf("Substring 4: %s\n ", substrings[4]);
+	printf("Substring 4: %s\n", substrings[4]);
 
 	if (strcmp(substrings[0], "cmd") != 0)
 	{
@@ -419,6 +415,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
 	int i = 0;
+	printf("Start: %d\n", start);
 	if (start < 0)
 	{
 		return -1;

@@ -132,11 +132,10 @@ int decode_incoming_request(char coded_request[], char request[])
     }
 
     // check if the incomming request is coded
-    printf(" if the incomming request is coded\n");
     if (coded_request[1] & 0x80)
     {
         // yes: then decode request
-        printf("yes: then decode request.\n");
+        printf("Decode request.\n");
         char masks[4] = {coded_request[2], coded_request[3], coded_request[4], coded_request[5]};
         int i;
         for (i = 0; i < size; i++)
@@ -148,7 +147,7 @@ int decode_incoming_request(char coded_request[], char request[])
     else
     {
         // no: then remove only the 2 first bytes of request
-        printf("no: then remove only the 2 first bytes of request.\n");
+        printf("Remove the 2 first bytes of request.\n");
         int i;
         for (i = 0; i < size; i++)
         {
@@ -156,7 +155,7 @@ int decode_incoming_request(char coded_request[], char request[])
         }
         request[i] = 0;
     }
-    printf("Size: %d\n", size);
+    printf("decode_incomming_request output:\nSize: %d\n", size);
     return (size);
 }
 
