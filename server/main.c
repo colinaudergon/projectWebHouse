@@ -440,7 +440,7 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		}
 		target[i - start] = '\0';
 	}
-	printf("Target result: %s\n", target[i - start]);
+	printf("Target result: %s\n", target);
 	return i;
 }
 // Function to unbind the address
