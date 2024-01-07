@@ -329,11 +329,13 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		return -1;
 	}
 
-	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1][0];
+	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
+	printf("Value of dev_num: %d\n",dev_num);
 	printf("What is val_num: %c\n", (substrings[5][0]));
 	printf("What is val_num: %d\n", (10 * (int)substrings[5][0]));
-	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
+	// int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
+	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1];
 
 	// Perform additional validation if needed
 	printf("Val num: %d\n", val_num);
