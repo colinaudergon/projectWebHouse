@@ -339,11 +339,12 @@ static int processCommand(char *input, jsmntok_t *tokens)
 
 	// Perform additional validation if needed
 	printf("Val num: %d\n", val_num);
-	if (val_num < 0 || val_num > 99)
-	{
-		printf("Did not passed the validation");
-		return -1;
-	}
+	//correct for ascii code code
+	// if (val_num < 0 || val_num > 99)
+	// {
+	// 	printf("Did not passed the validation");
+	// 	return -1;
+	// }
 
 	printf("Passed the validation");
 	switch (cmd_num)
