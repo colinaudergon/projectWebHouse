@@ -302,7 +302,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 	printf("value of num_token: %d\n",num_tokens);
 	while (i < num_tokens)
 	{
-		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+		if (extractSubstring(substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 		{
 			printf("Substring[i][0]: %s\n", substrings[i][0]);
 			i++;
@@ -412,8 +412,8 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		break;
 	}
 }
-
-int extractSubstring(char *target, char *input, int start, int end, int maxsize)
+// extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
+int extractSubstring(const char *target, char *input, int start, int end, int maxsize)
 {
 	int i = 0;
 	printf("Start: %d\n", start);
@@ -431,7 +431,6 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 	}
 	else
 	{
-		printf("Target before processing: %s\n", target[i - start]);
 		i = start;
 		while (i < end)
 		{
