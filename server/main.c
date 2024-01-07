@@ -200,7 +200,7 @@ int main(int argc, char **argv)
 							int rProcessCommand = 0;
 
 							parsing_result = jsmn_parse(&parser, command, strlen(command), tokens, 8);
-							printf("Parsing result: %d\n",parsing_result);
+							printf("Parsing result: %d\n", parsing_result);
 							switch (parsing_result)
 							{
 							case JSMN_ERROR_INVAL:
@@ -305,19 +305,28 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 			i++;
 	}
-	printf("Substring 0: %s\n ",substrings[0]);
-	printf("Substring 2: %s\n",substrings[2]);
-	printf("Substring 4: %s\n ",substrings[4]);
-	if (strcmp(substrings[0], "cmd") != 0) return -1;
-	if (strcmp(substrings[2], "dev") != 0) return -1;
-	if (strcmp(substrings[4], "val") != 0) return -1;
+	printf("Value of co")
+		printf("Substring 0: %s\n ", substrings[0]);
+	printf("Substring 2: %s\n", substrings[2]);
+	printf("Substring 4: %s\n ", substrings[4]);
+
+	if (strcmp(substrings[0], "cmd") != 0)
+		return -1;
+	if (strcmp(substrings[2], "dev") != 0)
+		return -1;
+	if (strcmp(substrings[4], "val") != 0)
+		return -1;
+
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1][0];
-	int val_num = 10*(int)substrings[5][0] + (int)substrings[5][1] - 11*'0';
-	// Perform additional validation if needed
-	if(val_num < 0 || val_num > 99) return -1;
+	int val_num = 10 * (int)substrings[5][0] + (int)substrings[5][1] - 11 * '0';
 
-	switch (cmd_num){
+	// Perform additional validation if needed
+	if (val_num < 0 || val_num > 99)
+		return -1;
+
+	switch (cmd_num)
+	{
 	case READ:
 		switch (dev_num)
 		{
@@ -383,6 +392,9 @@ static int processCommand(char *input, jsmntok_t *tokens)
 			break;
 		}
 		break;
+	case default:
+		printf("Neither Read or Write commad: error");
+		break;
 	}
 }
 
@@ -397,6 +409,7 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		return -1;
 	else
 	{
+		printf("Target before processing: %s\n", target[i - start]);
 		i = start;
 		while (i < end)
 		{
@@ -405,20 +418,21 @@ int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 		}
 		target[i - start] = '\0';
 	}
+	printf("Target result: %s\n", target[i - start]);
 	return i;
 }
 // Function to unbind the address
 static void unbindSocket(int socket_fd)
 {
-    struct sockaddr_in server;
-    socklen_t addrlen = sizeof(struct sockaddr_in);
+	struct sockaddr_in server;
+	socklen_t addrlen = sizeof(struct sockaddr_in);
 
-    // Get the current socket address
-    if (getsockname(socket_fd, (struct sockaddr *)&server, &addrlen) == 0)
-    {
-        printf("Unbinding address %s:%d\n", inet_ntoa(server.sin_addr), ntohs(server.sin_port));
-        memset(&server, 0, sizeof(struct sockaddr_in));
-        server.sin_family = AF_UNSPEC;
-        bind(socket_fd, (struct sockaddr *)&server, sizeof(struct sockaddr_in));
-    }
+	// Get the current socket address
+	if (getsockname(socket_fd, (struct sockaddr *)&server, &addrlen) == 0)
+	{
+		printf("Unbinding address %s:%d\n", inet_ntoa(server.sin_addr), ntohs(server.sin_port));
+		memset(&server, 0, sizeof(struct sockaddr_in));
+		server.sin_family = AF_UNSPEC;
+		bind(socket_fd, (struct sockaddr *)&server, sizeof(struct sockaddr_in));
+	}
 }
