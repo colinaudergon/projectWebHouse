@@ -305,12 +305,12 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		if (extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 			i++;
 	}
-	printf("Substring 0: %s\n ",&substrings[0]);
-	printf("Substring 2: %s\n",&substrings[2]);
-	printf("Substring 4: %s\n ",&substrings[4]);
-	if (strcmp(&substrings[0], "cmd") != 0) return -1;
-	if (strcmp(&substrings[2], "dev") != 0) return -1;
-	if (strcmp(&substrings[4], "val") != 0) return -1;
+	printf("Substring 0: %s\n ",substrings[0]);
+	printf("Substring 2: %s\n",substrings[2]);
+	printf("Substring 4: %s\n ",substrings[4]);
+	if (strcmp(substrings[0], "cmd") != 0) return -1;
+	if (strcmp(substrings[2], "dev") != 0) return -1;
+	if (strcmp(substrings[4], "val") != 0) return -1;
 	int dev_num = (int)substrings[3][0] + (int)substrings[3][1];
 	int cmd_num = (int)substrings[1][0];
 	int val_num = 10*(int)substrings[5][0] + (int)substrings[5][1] - 11*'0';
