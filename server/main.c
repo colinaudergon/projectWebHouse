@@ -237,6 +237,18 @@ int main(int argc, char **argv)
 							// free(response);
 						}
 					}
+					//Do we keep this?
+					// 09/01 colin
+					// Test alarm state and send if it has detected something:
+					if (getAlarmState() == 1)
+					{
+						char response[100];
+						char codedResponse[strlen(response) + 2];
+						strcpy(response, "<Alarm detected something>");
+						code_outgoing_response(response, codedResponse);
+						send(com_sock_id, (void *)codedResponse, strlen(codedResponse), 0);
+						printf("\n\n");
+					}
 					if (eShutdown == TRUE)
 					{
 						break;
@@ -245,7 +257,6 @@ int main(int argc, char **argv)
 				close(com_sock_id);
 				unbindSocket(server_sock_id);
 			}
-
 			usleep(10000);
 			// sleep(1);
 		}
@@ -363,6 +374,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 			return 1 + getHeatState();
 			break;
 		case AA:
+		//Do we keep this?
 			return 1 + getAlarmState();
 			break;
 		}
@@ -414,6 +426,7 @@ static int processCommand(char *input, jsmntok_t *tokens)
 		break;
 	}
 }
+
 // extractSubstring(&substrings[i][0], input, tokens[i + 1].start, tokens[i + 1].end, 5) > 0)
 int extractSubstring(char *target, char *input, int start, int end, int maxsize)
 {
